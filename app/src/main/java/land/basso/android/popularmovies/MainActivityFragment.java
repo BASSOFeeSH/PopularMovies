@@ -1,10 +1,11 @@
 package land.basso.android.popularmovies;
 
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 
 /**
@@ -21,6 +22,23 @@ public class MainActivityFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        return inflater.inflate(R.layout.fragment_main, container, false);
+        View inflatedView = inflater.inflate(R.layout.fragment_main, container, false);
+
+
+        try
+        {
+            FetchMoviesTask task = new FetchMoviesTask(getActivity());
+            task.execute();
+        }
+        catch(Exception exc)
+        {
+            Toast.makeText(getActivity().getApplicationContext(), exc.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
+//                    sendMessage();
+//        Toast.makeText(getActivity().getApplicationContext(), v.getText().toString(),Toast.LENGTH_SHORT).show();
+
+
+        return inflatedView;
     }
 }

@@ -1,5 +1,13 @@
 <resources>
     <string name="app_name">Popular Movies</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <string name="api_image_url">http://image.tmdb.org/t/p/</string>
+    <string name="api_imagesize_tiny">w92</string>
+    <string name="api_imagesize_small">w154</string>
+    <string name="api_imagesize_medium">w185</string>
+    <string name="api_imagesize_large">w342</string>
+    <string name="api_imagesize_xlarge">w500</string>
+    <string name="api_imagesize_huge">w780</string>
+    <string name="api_imagesize_original">original</string>
 </resources>
