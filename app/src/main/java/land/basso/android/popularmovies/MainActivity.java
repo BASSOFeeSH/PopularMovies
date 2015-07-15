@@ -6,9 +6,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.GridView;
 
+import java.util.ArrayList;
+
 
 public class MainActivity extends ActionBarActivity
 {
+    public ArrayList<Movie> mMovies;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)

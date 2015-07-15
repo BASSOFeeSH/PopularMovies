@@ -7,6 +7,8 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+import com.squareup.picasso.Picasso;
+
 /**
  * Created by jbasso on 7/10/2015.
  */
@@ -18,8 +20,12 @@ public class ImageAdapter extends BaseAdapter
         mContext = c;
     }
 
-    public int getCount() {
-        return mThumbIds.length;
+    public int getCount()
+    {
+        if(((MainActivity)mContext).mMovies == null)
+            return mThumbIds.length;
+        else
+            return ((MainActivity)mContext).mMovies.size();
     }
 
     public Object getItem(int position) {
@@ -36,6 +42,7 @@ public class ImageAdapter extends BaseAdapter
         if (convertView == null) {
             // if it's not recycled, initialize some attributes
             imageView = new ImageView(mContext);
+//            imageView.setLayoutParams(new GridView.LayoutParams(GridView.LayoutParams.WRAP_CONTENT, GridView.LayoutParams.WRAP_CONTENT));
             imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setPadding(8, 8, 8, 8);
@@ -43,7 +50,11 @@ public class ImageAdapter extends BaseAdapter
             imageView = (ImageView) convertView;
         }
 
-        imageView.setImageResource(mThumbIds[position]);
+        if(((MainActivity)mContext).mMovies != null)
+            Picasso.with(mContext).load(((MainActivity)mContext).mMovies.get(position).posterURL).into(imageView);
+        else
+            imageView.setImageResource(mThumbIds[position]);
+
         return imageView;
     }
 

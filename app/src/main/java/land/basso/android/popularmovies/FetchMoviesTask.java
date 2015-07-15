@@ -3,6 +3,7 @@ package land.basso.android.popularmovies;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.GridView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,6 +38,10 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<land.basso.
     protected void onPostExecute(ArrayList<Movie> movies)
     {
         super.onPostExecute(movies);
+
+        ((MainActivity)mContext).mMovies = this.mMovies;
+        GridView posterGrid = (GridView)((MainActivity) mContext).findViewById(R.id.main_fragment_poster_grid);
+        posterGrid.invalidateViews();
     }
 
     @Override
@@ -109,7 +114,7 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<land.basso.
             }
         }
 
-        return null;
+        return mMovies;
     }
 
     /**
@@ -152,8 +157,8 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<land.basso.
                 movie.ID            =   rec.getString(OWM_ID);
                 movie.overview      =   rec.getString(OWM_OVERVIEW);
                 movie.releaseDate   =   rec.getString(OWM_RELASE_DATE);
-                movie.posterURL     =   R.string.api_image_url +
-                                        R.string.api_imagesize_medium +
+                movie.posterURL     =   mContext.getString(R.string.api_image_url) +
+                                        mContext.getString(R.string.api_imagesize_medium) +
                                         rec.getString(OWM_POSTER_PATH);
                 movie.title         =   rec.getString(OWM_TITLE);
                 movie.rating        =   rec.getString(OWM_VOTE_AVERAGE);
