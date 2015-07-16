@@ -4,8 +4,6 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
-import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
@@ -38,22 +36,23 @@ public class ImageAdapter extends BaseAdapter
 
     // create a new ImageView for each item referenced by the Adapter
     public View getView(int position, View convertView, ViewGroup parent) {
-        ImageView imageView;
-        if (convertView == null) {
+        land.basso.android.popularmovies.AspectRatioImageView imageView;
+        if (convertView == null)
+        {
             // if it's not recycled, initialize some attributes
-            imageView = new ImageView(mContext);
+            imageView = new land.basso.android.popularmovies.AspectRatioImageView(mContext);
 //            imageView.setLayoutParams(new GridView.LayoutParams(GridView.LayoutParams.WRAP_CONTENT, GridView.LayoutParams.WRAP_CONTENT));
-            imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(8, 8, 8, 8);
-        } else {
-            imageView = (ImageView) convertView;
+//            imageView.setLayoutParams(new GridView.LayoutParams(185, 185));
+//            imageView.setScaleType(ImageView.ScaleType.CENTER);
+        } else
+        {
+            imageView = (land.basso.android.popularmovies.AspectRatioImageView) convertView;
         }
 
         if(((MainActivity)mContext).mMovies != null)
             Picasso.with(mContext).load(((MainActivity)mContext).mMovies.get(position).posterURL).into(imageView);
         else
-            imageView.setImageResource(mThumbIds[position]);
+            imageView.setImageResource(R.mipmap.ic_loader);
 
         return imageView;
     }

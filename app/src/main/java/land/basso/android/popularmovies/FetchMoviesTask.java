@@ -158,7 +158,7 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<land.basso.
                 movie.overview      =   rec.getString(OWM_OVERVIEW);
                 movie.releaseDate   =   rec.getString(OWM_RELASE_DATE);
                 movie.posterURL     =   mContext.getString(R.string.api_image_url) +
-                                        mContext.getString(R.string.api_imagesize_medium) +
+                                        mContext.getString(R.string.api_imagesize_huge) +
                                         rec.getString(OWM_POSTER_PATH);
                 movie.title         =   rec.getString(OWM_TITLE);
                 movie.rating        =   rec.getString(OWM_VOTE_AVERAGE);

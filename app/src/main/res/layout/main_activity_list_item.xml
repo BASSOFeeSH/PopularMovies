@@ -3,11 +3,11 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <ImageView
+    <land.basso.android.popularmovies.AspectRatioImageView
         android:id="@+id/main_fragment_grid_item_poster"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#115599"
+        android:background="#000000"
         />
 
 </FrameLayout>
