@@ -10,4 +10,9 @@
     <string name="api_imagesize_xlarge">w500</string>
     <string name="api_imagesize_huge">w780</string>
     <string name="api_imagesize_original">original</string>
+
+    <string name="api_base_url">http://api.themoviedb.org/3/discover/movie?</string>
+    <string name="api_sort_by_popularity">sort_by=popularity.desc</string>
+    <string name="api_sort_by_rating">sort_by=vote_average.desc</string>
+    <string name="api_key">api_key=cc363d0ba96599c03d034675c48f570a</string>
 </resources>

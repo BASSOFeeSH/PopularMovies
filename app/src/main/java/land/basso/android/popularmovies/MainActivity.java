@@ -1,5 +1,6 @@
 package land.basso.android.popularmovies;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,12 +13,15 @@ import java.util.ArrayList;
 public class MainActivity extends ActionBarActivity
 {
     public ArrayList<Movie> mMovies;
+    public String mSort;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mSort = Utility.getCurrentSort(this);
 
         GridView posterGrid = (GridView) findViewById(R.id.main_fragment_poster_grid);
         posterGrid.setAdapter(new ImageAdapter(this));
@@ -43,6 +47,7 @@ public class MainActivity extends ActionBarActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings)
         {
+            startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
 

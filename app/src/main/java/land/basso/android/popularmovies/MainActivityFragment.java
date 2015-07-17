@@ -19,12 +19,16 @@ public class MainActivityFragment extends Fragment
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState)
+    public void onResume()
     {
-        View inflatedView = inflater.inflate(R.layout.fragment_main, container, false);
+        String sortSetting = Utility.getCurrentSort(getActivity());
+        if(sortSetting != ((MainActivity)getActivity()).mSort)
+            updateGrid();
+        super.onResume();
+    }
 
-
+    public void updateGrid()
+    {
         try
         {
             FetchMoviesTask task = new FetchMoviesTask(getActivity());
@@ -34,10 +38,15 @@ public class MainActivityFragment extends Fragment
         {
             Toast.makeText(getActivity().getApplicationContext(), exc.getMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
 
-//                    sendMessage();
-//        Toast.makeText(getActivity().getApplicationContext(), v.getText().toString(),Toast.LENGTH_SHORT).show();
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState)
+    {
+        View inflatedView = inflater.inflate(R.layout.fragment_main, container, false);
 
+        updateGrid();
 
         return inflatedView;
     }

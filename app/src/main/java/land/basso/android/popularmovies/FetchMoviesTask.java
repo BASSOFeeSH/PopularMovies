@@ -66,7 +66,17 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<land.basso.
             // Construct the URL for the OpenWeatherMap query
             // Possible parameters are avaiable at OWM's forecast API page, at
             // http://openweathermap.org/API#forecast
-            URL url = new URL("http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=cc363d0ba96599c03d034675c48f570a");
+            ((MainActivity)mContext).mSort = Utility.getCurrentSort(mContext);
+            URL url;
+            if(Utility.isSortByPopularity(mContext) == true)
+            {//i.e. URL url = new URL("http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=cc363d0ba96599c03d034675c48f570a");
+                url = new URL(mContext.getString(R.string.api_base_url) + mContext.getString(R.string.api_sort_by_popularity) + "&" + mContext.getString(R.string.api_key));
+            }
+            else
+            {
+                url = new URL(mContext.getString(R.string.api_base_url) + mContext.getString(R.string.api_sort_by_rating) + "&" + mContext.getString(R.string.api_key));
+            }
+
 
             // Create the request to OpenWeatherMap, and open the connection
             urlConnection = (HttpURLConnection) url.openConnection();
