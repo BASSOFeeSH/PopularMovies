@@ -15,4 +15,7 @@
     <string name="api_sort_by_popularity">sort_by=popularity.desc</string>
     <string name="api_sort_by_rating">sort_by=vote_average.desc</string>
     <string name="api_key">api_key=cc363d0ba96599c03d034675c48f570a</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

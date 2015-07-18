@@ -1,0 +1,120 @@
+<LinearLayout
+    android:id="@+id/detail_layout_main"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="land.basso.android.popularmovies.detail">
+
+    <TextView
+        android:id="@+id/detail_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/abc_action_bar_content_inset_material"
+        android:paddingTop="25dp"
+        android:paddingBottom="25dp"
+        android:background="@color/material_deep_teal_500"
+        android:textColor="#FFFFFF"
+        android:textSize="48sp"
+        android:gravity="center_vertical"
+        android:text="Chappie"/>
+
+    <LinearLayout
+        android:id="@+id/detail_layout_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="0.4"
+        >
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/detail_poster"
+            android:src="@drawable/sample_poster"
+            android:layout_weight="0.5"
+            android:padding="@dimen/abc_action_bar_content_inset_material"
+            />
+
+        <LinearLayout
+            android:id="@+id/detail_layout_info"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="0.5"
+            android:gravity="center_vertical"
+            >
+
+            <TextView
+                android:id="@+id/detail_release_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/abc_text_size_large_material"
+                android:paddingTop="10dp"
+                android:text="2015"
+                />
+
+            <TextView
+                android:id="@+id/detail_running_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/abc_text_size_large_material"
+                android:paddingTop="10dp"
+                android:text="120min"
+                />
+
+            <TextView
+                android:id="@+id/detail_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/abc_text_size_small_material"
+                android:paddingTop="10dp"
+                android:text="8.1/10"
+                />
+
+            <Button
+                android:id="@+id/detail_button_favorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#86e4db"
+                android:textColor="#444444"
+                android:text="MARK AS \nFAVORITE"
+                android:layout_marginTop="10dp"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/detail_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Every child comes into the world full of promise, and none more so than Chappie: he is gifted, special, a prodigy Chapie he is a robot."
+        />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:paddingTop="5dp"
+        android:background="?android:attr/listDivider"/>
+
+    <TextView
+        android:id="@+id/detail_trailer_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:textSize="20sp"
+        android:text="Trailers:"
+        />
+
+    <ListView
+        android:id="@+id/detail_list_trailers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.7"
+        tools:listitem="@layout/detail_trailer_list_item"
+        ></ListView>
+
+</LinearLayout>
