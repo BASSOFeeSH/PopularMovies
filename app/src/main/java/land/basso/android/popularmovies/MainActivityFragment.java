@@ -1,10 +1,13 @@
 package land.basso.android.popularmovies;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.Toast;
 
 
@@ -13,6 +16,21 @@ import android.widget.Toast;
  */
 public class MainActivityFragment extends Fragment
 {
+    public static final String LOG_TAG = MainActivityFragment.class.getSimpleName();
+    private GridView mGridView;
+    private int mPosition = GridView.INVALID_POSITION;
+
+    /**
+     * A callback interface that all activities containing this fragment must
+     * implement. This mechanism allows activities to be notified of item
+     * selections.
+     */
+    public interface Callback {
+        /**
+         * DetailFragmentCallback for when an item has been selected.
+         */
+        public void onItemSelected(Uri dateUri);
+    }
 
     public MainActivityFragment()
     {
@@ -44,10 +62,32 @@ public class MainActivityFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        View inflatedView = inflater.inflate(R.layout.fragment_main, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         updateGrid();
 
-        return inflatedView;
+        // Get a reference to the ListView, and attach this adapter to it.
+        mGridView = (GridView) rootView.findViewById(R.id.main_fragment_poster_grid);
+//        mGridView.setAdapter(mForecastAdapter);
+        // We'll call our MainActivity
+        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l)
+            {
+                 //TODO
+                Toast.makeText(getActivity().getApplicationContext(), ((MainActivity)getActivity()).mMovies.get(position).title, Toast.LENGTH_LONG).show();
+//                    String locationSetting = Utility.getPreferredLocation(getActivity());
+//                    ((Callback) getActivity())
+//                            .onItemSelected(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(
+//                                    locationSetting, cursor.getLong(COL_WEATHER_DATE)
+//                    ));
+//                }
+                mPosition = position;
+            }
+        });
+
+        return rootView;
     }
 }
