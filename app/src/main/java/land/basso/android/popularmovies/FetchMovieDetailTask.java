@@ -20,14 +20,14 @@ import java.util.ArrayList;
 /**
  * Created by jbasso on 7/8/2015.
  */
-public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
+public class FetchMovieDetailTask extends AsyncTask<Void, Void, ArrayList<Movie>>
 {
 
-    private final String LOG_TAG = FetchMoviesTask.class.getSimpleName();
+    private final String LOG_TAG = FetchMovieDetailTask.class.getSimpleName();
     private final Context mContext;
     private ArrayList<Movie> mMovies;
 
-    public FetchMoviesTask(Context context)
+    public FetchMovieDetailTask(Context context)
     {
         mContext = context;
     }
@@ -42,6 +42,73 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
         ((MainActivity)mContext).mMovies = this.mMovies;
         GridView posterGrid = (GridView)((MainActivity) mContext).findViewById(R.id.main_fragment_poster_grid);
         posterGrid.invalidateViews();
+    }
+
+    protected  ArrayList<Trailer> getTrailersForMovie(String movieID)
+    {
+        ArrayList<Trailer> returnVal = new ArrayList<Trailer>();
+
+        HttpURLConnection urlConnection = null;
+        BufferedReader reader = null;
+
+        // Will contain the raw JSON response as a string.
+        String jsonStr = null;
+
+        try {
+            // Construct the URL for the OpenWeatherMap query
+            // Possible parameters are avaiable at OWM's forecast API page, at
+            // http://openweathermap.org/API#forecast
+            ((MainActivity)mContext).mSort = Utility.getCurrentSort(mContext);
+            URL url;
+            url = new URL(mContext.getString(R.string.api_trailers_url).replace("{ID}", movieID) + "&" + mContext.getString(R.string.api_key));
+
+            // Create the request to OpenWeatherMap, and open the connection
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.connect();
+
+            // Read the input stream into a String
+            InputStream inputStream = urlConnection.getInputStream();
+            StringBuffer buffer = new StringBuffer();
+            if (inputStream == null) {
+                // Nothing to do.
+                return null;
+            }
+            reader = new BufferedReader(new InputStreamReader(inputStream));
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
+                // But it does make debugging a *lot* easier if you print out the completed
+                // buffer for debugging.
+                buffer.append(line + "\n");
+            }
+
+            if (buffer.length() == 0) {
+                // Stream was empty.  No point in parsing.
+                return null;
+            }
+            jsonStr = buffer.toString();
+            returnVal = getTrailerDataFromJson(jsonStr);
+        } catch (Exception e) {
+            Log.e("PlaceholderFragment", "Error ", e);
+            // If the code didn't successfully get the weather data, there's no point in attemping
+            // to parse it.
+            return null;
+        } finally{
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (final IOException e) {
+                    Log.e("PlaceholderFragment", "Error closing stream", e);
+                }
+            }
+        }
+
+        return returnVal;
     }
 
     @Override
@@ -70,11 +137,11 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
             URL url;
             if(Utility.isSortByPopularity(mContext) == true)
             {//i.e. URL url = new URL("http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=cc363d0ba96599c03d034675c48f570a");
-                url = new URL(mContext.getString(R.string.api_discover_url) + mContext.getString(R.string.api_sort_by_popularity) + "&" + mContext.getString(R.string.api_include_video) + "&" + mContext.getString(R.string.api_key));
+                url = new URL(mContext.getString(R.string.api_discover_url) + mContext.getString(R.string.api_sort_by_popularity) + "&" + mContext.getString(R.string.api_key));
             }
             else
             {
-                url = new URL(mContext.getString(R.string.api_discover_url) + mContext.getString(R.string.api_sort_by_rating) + "&" + mContext.getString(R.string.api_include_video) + "&" + mContext.getString(R.string.api_key));
+                url = new URL(mContext.getString(R.string.api_discover_url) + mContext.getString(R.string.api_sort_by_rating) + "&" + mContext.getString(R.string.api_key));
             }
 
 
@@ -172,7 +239,7 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
                                         rec.getString(OWM_POSTER_PATH);
                 movie.title         =   rec.getString(OWM_TITLE);
                 movie.rating        =   rec.getString(OWM_VOTE_AVERAGE);
-                movie.trailers      =   getTrailersForMovie(movie.ID);
+                movie.trailers = getTrailersForMovie(movie.ID);
 
                 mMovies.add(movie);
             }
@@ -226,7 +293,7 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
 
                 trailer.id          =   rec.getString(OWM_ID);
                 trailer.url         =   mContext.getString(R.string.api_youtube_url).replace("{ID}", rec
-                                        .getString(OWM_KEY));
+                        .getString(OWM_KEY));
                 trailer.name        =   rec.getString(OWM_NAME);
                 trailer.site        =   rec.getString(OWM_SITE);
                 trailer.size        =   rec.getString(OWM_SIZE);
@@ -240,73 +307,6 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
-        }
-
-        return returnVal;
-    }
-
-    protected  ArrayList<Trailer> getTrailersForMovie(String movieID)
-    {
-        ArrayList<Trailer> returnVal = new ArrayList<Trailer>();
-
-        HttpURLConnection urlConnection = null;
-        BufferedReader reader = null;
-
-        // Will contain the raw JSON response as a string.
-        String jsonStr = null;
-
-        try {
-            // Construct the URL for the OpenWeatherMap query
-            // Possible parameters are avaiable at OWM's forecast API page, at
-            // http://openweathermap.org/API#forecast
-            ((MainActivity)mContext).mSort = Utility.getCurrentSort(mContext);
-            URL url;
-            url = new URL(mContext.getString(R.string.api_trailers_url).replace("{ID}", movieID) + "&" + mContext.getString(R.string.api_key));
-
-            // Create the request to OpenWeatherMap, and open the connection
-            urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod("GET");
-            urlConnection.connect();
-
-            // Read the input stream into a String
-            InputStream inputStream = urlConnection.getInputStream();
-            StringBuffer buffer = new StringBuffer();
-            if (inputStream == null) {
-                // Nothing to do.
-                return null;
-            }
-            reader = new BufferedReader(new InputStreamReader(inputStream));
-
-            String line;
-            while ((line = reader.readLine()) != null) {
-                // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
-                // But it does make debugging a *lot* easier if you print out the completed
-                // buffer for debugging.
-                buffer.append(line + "\n");
-            }
-
-            if (buffer.length() == 0) {
-                // Stream was empty.  No point in parsing.
-                return null;
-            }
-            jsonStr = buffer.toString();
-            returnVal = getTrailerDataFromJson(jsonStr);
-        } catch (Exception e) {
-            Log.e("PlaceholderFragment", "Error ", e);
-            // If the code didn't successfully get the weather data, there's no point in attemping
-            // to parse it.
-            return null;
-        } finally{
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-            }
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (final IOException e) {
-                    Log.e("PlaceholderFragment", "Error closing stream", e);
-                }
-            }
         }
 
         return returnVal;

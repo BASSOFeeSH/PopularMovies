@@ -91,6 +91,7 @@
         android:id="@+id/detail_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="@dimen/abc_action_bar_content_inset_material"
         android:text="Every child comes into the world full of promise, and none more so than Chappie: he is gifted, special, a prodigy Chapie he is a robot."
         />
 

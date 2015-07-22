@@ -1,5 +1,7 @@
 package land.basso.android.popularmovies;
 
+import java.util.ArrayList;
+
 /**
  * Created by jbasso on 7/9/2015.
  */
@@ -12,4 +14,5 @@ public class Movie
     public String runningTime;
     public String rating;
     public String overview;
+    public ArrayList<Trailer> trailers;
 }
