@@ -40,7 +40,7 @@ public class FetchMovieDetailTask extends AsyncTask<Void, Void, ArrayList<Movie>
         super.onPostExecute(movies);
 
         ((MainActivity)mContext).mMovies = this.mMovies;
-        GridView posterGrid = (GridView)((MainActivity) mContext).findViewById(R.id.main_fragment_poster_grid);
+        GridView posterGrid = (GridView)((MainActivity) mContext).findViewById(R.id.main_fragment_grid);
         posterGrid.invalidateViews();
     }
 

@@ -7,17 +7,21 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link detail.OnFragmentInteractionListener} interface
+ * {@link MainActivityFragmentDetail.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link detail#newInstance} factory method to
+ * Use the {@link MainActivityFragmentDetail#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class detail extends Fragment
+public class MainActivityFragmentDetail extends Fragment
 {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -28,31 +32,36 @@ public class detail extends Fragment
     private String mParam1;
     private String mParam2;
 
+    private int mPosition;
+
     private OnFragmentInteractionListener mListener;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     *
-     * @return A new instance of fragment detail.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static detail newInstance(String param1, String param2)
-    {
-        detail fragment = new detail();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+//    /**
+//     * Use this factory method to create a new instance of
+//     * this fragment using the provided parameters.
+//     *
+//     * @param param1 Parameter 1.
+//     * @param param2 Parameter 2.
+//     *
+//     * @return A new instance of fragment MainActivityFragmentDetail.
+//     */
+//    // TODO: Rename and change types and number of parameters
+//    public static MainActivityFragmentDetail newInstance(String param1, String param2)
+//    {
+//        MainActivityFragmentDetail fragment = new MainActivityFragmentDetail();
+//        Bundle args = new Bundle();
+//        args.putString(ARG_PARAM1, param1);
+//        args.putString(ARG_PARAM2, param2);
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
 
-    public detail()
+    public MainActivityFragmentDetail() { }
+
+    public MainActivityFragmentDetail(int position)
     {
         // Required empty public constructor
+        mPosition = position;
     }
 
     @Override
@@ -71,7 +80,27 @@ public class detail extends Fragment
                              Bundle savedInstanceState)
     {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_detail, container, false);
+        View rootView = inflater.inflate(R.layout.main_fragment_detail, container, false);
+
+        Movie movie = ((MainActivity)getActivity()).mMovies.get(mPosition);
+
+        MainActivity context = (MainActivity)getActivity();
+
+        TextView    title   = (TextView)rootView.findViewById(R.id.detail_title);
+        TextView    year   = (TextView)rootView.findViewById(R.id.detail_release_date);
+        TextView    time   = (TextView)rootView.findViewById(R.id.detail_running_time);
+        TextView    rating  = (TextView)rootView.findViewById(R.id.detail_rating);
+        TextView    overview   = (TextView)rootView.findViewById(R.id.detail_description);
+        ImageView   poster  = (ImageView)rootView.findViewById(R.id.detail_poster);
+
+        title.setText(movie.title);
+        year.setText(movie.releaseDate);
+        time.setText(movie.runningTime);
+        rating.setText(movie.rating);
+        overview.setText(movie.overview);
+        Picasso.with(getActivity()).load(movie.posterURL).into(poster);
+
+        return  rootView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

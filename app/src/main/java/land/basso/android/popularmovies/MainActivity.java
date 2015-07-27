@@ -1,16 +1,18 @@
 package land.basso.android.popularmovies;
 
+import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.GridView;
 
 import java.util.ArrayList;
 
 
-public class MainActivity extends ActionBarActivity
+public class MainActivity   extends     ActionBarActivity
+                            implements  MainActivityFragmentDetail.OnFragmentInteractionListener
 {
     public ArrayList<Movie> mMovies;
     public String mSort;
@@ -19,16 +21,30 @@ public class MainActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main_activity);
+
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        MainActivityFragment fragment = new MainActivityFragment();
+        ft.add(R.id.fragment, fragment);
+        ft.addToBackStack("Main");
+        ft.commit();
+
+//        mSort = Utility.getCurrentSort(this);
+//
+//        GridView posterGrid = (GridView) findViewById(R.id.main_fragment_grid);
+//        posterGrid.setAdapter(new ImageAdapter(this));
+    }
+
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
 
         mSort = Utility.getCurrentSort(this);
 
-        GridView posterGrid = (GridView) findViewById(R.id.main_fragment_poster_grid);
-        posterGrid.setAdapter(new ImageAdapter(this));
+//        GridView posterGrid = (GridView) findViewById(R.id.main_fragment_grid);
+//        posterGrid.setAdapter(new ImageAdapter(this));
     }
-
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -54,5 +70,30 @@ public class MainActivity extends ActionBarActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showDetailsForMovie(int position)
+    {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        MainActivityFragmentDetail fragment = new MainActivityFragmentDetail(position);
+        ft.replace(R.id.fragment, fragment);
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        ft.addToBackStack("Detail");
+        ft.commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getFragmentManager().getBackStackEntryCount() > 0) {
+            getFragmentManager().popBackStack();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri)
+    {
+
     }
 }
