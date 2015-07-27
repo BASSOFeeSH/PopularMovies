@@ -26,7 +26,7 @@ public class MainActivity   extends     ActionBarActivity
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         MainActivityFragment fragment = new MainActivityFragment();
         ft.add(R.id.fragment, fragment);
-        ft.addToBackStack("Main");
+//        ft.addToBackStack("Main");
         ft.commit();
 
 //        mSort = Utility.getCurrentSort(this);
