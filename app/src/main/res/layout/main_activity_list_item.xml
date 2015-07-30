@@ -3,7 +3,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <land.basso.android.popularmovies.AspectRatioImageView
+    <View
         android:id="@+id/main_fragment_grid_item_poster"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

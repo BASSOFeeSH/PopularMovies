@@ -21,7 +21,7 @@ public class ImageAdapter extends BaseAdapter
     public int getCount()
     {
         if(((MainActivity)mContext).mMovies == null)
-            return mThumbIds.length;
+            return 0; //return mThumbIds.length;
         else
             return ((MainActivity)mContext).mMovies.size();
     }
@@ -36,39 +36,29 @@ public class ImageAdapter extends BaseAdapter
 
     // create a new ImageView for each item referenced by the Adapter
     public View getView(int position, View convertView, ViewGroup parent) {
-        land.basso.android.popularmovies.AspectRatioImageView imageView;
+        AspectRatioImageView imageView;// = new AspectRatioImageView(mContext);
+
         if (convertView == null)
         {
             // if it's not recycled, initialize some attributes
-            imageView = new land.basso.android.popularmovies.AspectRatioImageView(mContext);
+            imageView = new AspectRatioImageView(mContext);
+
 //            imageView.setLayoutParams(new GridView.LayoutParams(GridView.LayoutParams.WRAP_CONTENT, GridView.LayoutParams.WRAP_CONTENT));
 //            imageView.setLayoutParams(new GridView.LayoutParams(185, 185));
 //            imageView.setScaleType(ImageView.ScaleType.CENTER);
         } else
         {
-            imageView = (land.basso.android.popularmovies.AspectRatioImageView) convertView;
+            imageView = (AspectRatioImageView)convertView;
         }
 
         if(((MainActivity)mContext).mMovies != null)
-            Picasso.with(mContext).load(((MainActivity)mContext).mMovies.get(position).posterURL).into(imageView);
-        else
-            imageView.setImageResource(R.mipmap.ic_loader);
+        {
+            Picasso.with(mContext).load(((MainActivity) mContext).mMovies.get(position).posterURL)
+                   .placeholder(R.drawable.loading)
+                    .error(R.drawable.error)
+                    .into(imageView);
+        }
 
         return imageView;
     }
-
-    // references to our images
-    private Integer[] mThumbIds = {
-            R.mipmap.ic_launcher, R.mipmap.ic_launcher,
-            R.mipmap.ic_launcher, R.mipmap.ic_launcher,
-            R.mipmap.ic_launcher, R.mipmap.ic_launcher,
-            R.mipmap.ic_launcher, R.mipmap.ic_launcher,
-            R.mipmap.ic_launcher, R.mipmap.ic_launcher,
-            R.mipmap.ic_launcher, R.mipmap.ic_launcher,
-            R.mipmap.ic_launcher, R.mipmap.ic_launcher,
-            R.mipmap.ic_launcher, R.mipmap.ic_launcher,
-            R.mipmap.ic_launcher, R.mipmap.ic_launcher,
-            R.mipmap.ic_launcher, R.mipmap.ic_launcher,
-            R.mipmap.ic_launcher, R.mipmap.ic_launcher
-    };
 }

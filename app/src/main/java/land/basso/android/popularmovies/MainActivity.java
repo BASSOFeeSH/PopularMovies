@@ -40,7 +40,7 @@ public class MainActivity   extends     ActionBarActivity
     {
         super.onStart();
 
-        mSort = Utility.getCurrentSort(this);
+//        mSort = Utility.getCurrentSort(this);
 
 //        GridView posterGrid = (GridView) findViewById(R.id.main_fragment_grid);
 //        posterGrid.setAdapter(new ImageAdapter(this));

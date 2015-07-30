@@ -25,11 +25,13 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
 
     private final String LOG_TAG = FetchMoviesTask.class.getSimpleName();
     private final Context mContext;
+    private final int     mPosition;
     private ArrayList<Movie> mMovies;
 
-    public FetchMoviesTask(Context context)
+    public FetchMoviesTask(Context context, int position)
     {
         mContext = context;
+        mPosition = position;
     }
 
     private boolean DEBUG = true;
@@ -42,6 +44,7 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
         ((MainActivity)mContext).mMovies = this.mMovies;
         GridView posterGrid = (GridView)((MainActivity) mContext).findViewById(R.id.main_fragment_grid);
         posterGrid.invalidateViews();
+        if(mPosition != GridView.INVALID_POSITION) {    posterGrid.smoothScrollToPosition(mPosition);   }
     }
 
     @Override
@@ -70,11 +73,17 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
             URL url;
             if(Utility.isSortByPopularity(mContext) == true)
             {//i.e. URL url = new URL("http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=cc363d0ba96599c03d034675c48f570a");
-                url = new URL(mContext.getString(R.string.api_discover_url) + mContext.getString(R.string.api_sort_by_popularity) + "&" + mContext.getString(R.string.api_include_video) + "&" + mContext.getString(R.string.api_key));
+                url = new URL(mContext.getString(R.string.api_discover_url)
+                                .replace(mContext.getString(R.string.api_sort_placeholder), mContext.getString(R.string.api_sort_by_popularity))
+                                .replace(mContext.getString(R.string.api_key_placeholder), mContext.getString(R.string.api_key))
+                                );
             }
             else
             {
-                url = new URL(mContext.getString(R.string.api_discover_url) + mContext.getString(R.string.api_sort_by_rating) + "&" + mContext.getString(R.string.api_include_video) + "&" + mContext.getString(R.string.api_key));
+                url = new URL(mContext.getString(R.string.api_discover_url)
+                                      .replace(mContext.getString(R.string.api_sort_placeholder), mContext.getString(R.string.api_sort_by_rating))
+                                      .replace(mContext.getString(R.string.api_key_placeholder), mContext.getString(R.string.api_key))
+                );
             }
 
 
@@ -166,13 +175,14 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
 
                 movie.ID            =   rec.getString(OWM_ID);
                 movie.overview      =   rec.getString(OWM_OVERVIEW);
-                movie.releaseDate   =   rec.getString(OWM_RELASE_DATE);
+                movie.releaseDate   =   rec.getString(OWM_RELASE_DATE).substring(0,4);
                 movie.posterURL     =   mContext.getString(R.string.api_image_url) +
                                         mContext.getString(R.string.api_imagesize_huge) +
                                         rec.getString(OWM_POSTER_PATH);
                 movie.title         =   rec.getString(OWM_TITLE);
                 movie.rating        =   rec.getString(OWM_VOTE_AVERAGE);
                 movie.trailers      =   getTrailersForMovie(movie.ID);
+                movie.runningTime   =   getRunningTimeForMovie(movie.ID);
 
                 mMovies.add(movie);
             }
@@ -226,7 +236,7 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
 
                 trailer.id          =   rec.getString(OWM_ID);
                 trailer.url         =   mContext.getString(R.string.api_youtube_url).replace("{ID}", rec
-                                        .getString(OWM_KEY));
+                        .getString(OWM_KEY));
                 trailer.name        =   rec.getString(OWM_NAME);
                 trailer.site        =   rec.getString(OWM_SITE);
                 trailer.size        =   rec.getString(OWM_SIZE);
@@ -236,6 +246,46 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
             }
 
             Log.d(LOG_TAG, "FetchMobiesTask Complete. " + "inserted" + " Inserted");
+
+        } catch (JSONException e) {
+            Log.e(LOG_TAG, e.getMessage(), e);
+            e.printStackTrace();
+        }
+
+        return returnVal;
+    }
+
+
+    /**
+     * Take the String representing the complete forecast in JSON Format and
+     * pull out the data we need to construct the Strings needed for the wireframes.
+     *
+     * Fortunately parsing is easy:  constructor takes the JSON string and converts it
+     * into an Object hierarchy for us.
+     */
+    private String getRunningTimeDataFromJson(String jsonStr)
+            throws JSONException
+    {
+
+        // Now we have a String representing the complete forecast in JSON Format.
+        // Fortunately parsing is easy:  constructor takes the JSON string and converts it
+        // into an Object hierarchy for us.
+
+        // These are the names of the JSON objects that need to be extracted.
+
+        // Location information
+        final String OWM_ID = "id";
+        final String OWM_RESULTS = "results";
+        final String OWM_RUNTIME = "runtime";
+
+        String returnVal = "";
+
+        try {
+            JSONObject json = new JSONObject(jsonStr);
+
+            returnVal        =   json.getString(OWM_RUNTIME);
+
+            Log.d(LOG_TAG, "FetchRuntimeTask Complete. " + "inserted" + " Inserted");
 
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
@@ -261,7 +311,9 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
             // http://openweathermap.org/API#forecast
             ((MainActivity)mContext).mSort = Utility.getCurrentSort(mContext);
             URL url;
-            url = new URL(mContext.getString(R.string.api_trailers_url).replace("{ID}", movieID) + "&" + mContext.getString(R.string.api_key));
+            url = new URL(mContext.getString(R.string.api_trailers_url)
+                                  .replace(mContext.getString(R.string.api_id_placeholder), movieID)
+                                  .replace(mContext.getString(R.string.api_key_placeholder), mContext.getString(R.string.api_key)));
 
             // Create the request to OpenWeatherMap, and open the connection
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -291,6 +343,75 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
             }
             jsonStr = buffer.toString();
             returnVal = getTrailerDataFromJson(jsonStr);
+        } catch (Exception e) {
+            Log.e("PlaceholderFragment", "Error ", e);
+            // If the code didn't successfully get the weather data, there's no point in attemping
+            // to parse it.
+            return null;
+        } finally{
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (final IOException e) {
+                    Log.e("PlaceholderFragment", "Error closing stream", e);
+                }
+            }
+        }
+
+        return returnVal;
+    }
+
+
+    protected  String getRunningTimeForMovie(String movieID)
+    {
+        String returnVal = "";
+
+        HttpURLConnection urlConnection = null;
+        BufferedReader reader = null;
+
+        // Will contain the raw JSON response as a string.
+        String jsonStr = null;
+
+        try {
+            // Construct the URL for the OpenWeatherMap query
+            // Possible parameters are avaiable at OWM's forecast API page, at
+            // http://openweathermap.org/API#forecast
+            URL url;
+            url = new URL(mContext.getString(R.string.api_movie_url)
+                                  .replace(mContext.getString(R.string.api_id_placeholder), movieID)
+                                  .replace(mContext.getString(R.string.api_key_placeholder), mContext.getString(R.string.api_key)));
+
+            // Create the request to OpenWeatherMap, and open the connection
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.connect();
+
+            // Read the input stream into a String
+            InputStream inputStream = urlConnection.getInputStream();
+            StringBuffer buffer = new StringBuffer();
+            if (inputStream == null) {
+                // Nothing to do.
+                return null;
+            }
+            reader = new BufferedReader(new InputStreamReader(inputStream));
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
+                // But it does make debugging a *lot* easier if you print out the completed
+                // buffer for debugging.
+                buffer.append(line + "\n");
+            }
+
+            if (buffer.length() == 0) {
+                // Stream was empty.  No point in parsing.
+                return null;
+            }
+            jsonStr = buffer.toString();
+            returnVal = getRunningTimeDataFromJson(jsonStr);
         } catch (Exception e) {
             Log.e("PlaceholderFragment", "Error ", e);
             // If the code didn't successfully get the weather data, there's no point in attemping

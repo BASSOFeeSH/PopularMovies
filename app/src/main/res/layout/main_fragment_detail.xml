@@ -11,12 +11,10 @@
         android:id="@+id/detail_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/abc_action_bar_content_inset_material"
-        android:paddingTop="25dp"
-        android:paddingBottom="25dp"
+        android:padding="@dimen/abc_action_bar_content_inset_material"
         android:background="@color/material_deep_teal_500"
         android:textColor="#FFFFFF"
-        android:textSize="48sp"
+        android:textSize="36sp"
         android:gravity="center_vertical"
         android:text="Chappie"/>
 
@@ -91,14 +89,13 @@
         android:id="@+id/detail_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/abc_action_bar_content_inset_material"
         android:text="Every child comes into the world full of promise, and none more so than Chappie: he is gifted, special, a prodigy Chapie he is a robot."
+
         />
 
     <View
         android:layout_width="fill_parent"
         android:layout_height="2dp"
-        android:paddingTop="5dp"
         android:background="?android:attr/listDivider"/>
 
     <TextView
