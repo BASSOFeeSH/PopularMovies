@@ -46,15 +46,15 @@ public class MainActivityFragmentDetail extends Fragment
 //     * @return A new instance of fragment MainActivityFragmentDetail.
 //     */
 //    // TODO: Rename and change types and number of parameters
-//    public static MainActivityFragmentDetail newInstance(String param1, String param2)
-//    {
-//        MainActivityFragmentDetail fragment = new MainActivityFragmentDetail();
-//        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
+    public static MainActivityFragmentDetail newInstance(String param1, String param2)
+    {
+        MainActivityFragmentDetail fragment = new MainActivityFragmentDetail();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     public MainActivityFragmentDetail() { }
 
@@ -146,7 +146,6 @@ public class MainActivityFragmentDetail extends Fragment
      */
     public interface OnFragmentInteractionListener
     {
-        // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
 

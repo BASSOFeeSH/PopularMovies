@@ -50,12 +50,6 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
     @Override
     protected ArrayList<Movie> doInBackground(Void... params)
     {
-        // If there's no search, there's nothing to look up.  Verify size of params.
-//        if (params.length == 0)
-//        {
-//            return null;
-//        }
-//        String artistQuery = params[0];
 
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
@@ -65,10 +59,8 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
         // Will contain the raw JSON response as a string.
         String jsonStr = null;
 
-        try {
-            // Construct the URL for the OpenWeatherMap query
-            // Possible parameters are avaiable at OWM's forecast API page, at
-            // http://openweathermap.org/API#forecast
+        try
+        {
             ((MainActivity)mContext).mSort = Utility.getCurrentSort(mContext);
             URL url;
             if(Utility.isSortByPopularity(mContext) == true)
@@ -78,7 +70,7 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
                                 .replace(mContext.getString(R.string.api_key_placeholder), mContext.getString(R.string.api_key))
                                 );
             }
-            else
+            else //by rating
             {
                 url = new URL(mContext.getString(R.string.api_discover_url)
                                       .replace(mContext.getString(R.string.api_sort_placeholder), mContext.getString(R.string.api_sort_by_rating))
@@ -95,39 +87,51 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
             // Read the input stream into a String
             InputStream inputStream = urlConnection.getInputStream();
             StringBuffer buffer = new StringBuffer();
-            if (inputStream == null) {
+            if (inputStream == null)
+            {
                 // Nothing to do.
                 return null;
             }
             reader = new BufferedReader(new InputStreamReader(inputStream));
 
             String line;
-            while ((line = reader.readLine()) != null) {
+            while ((line = reader.readLine()) != null)
+            {
                 // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
                 // But it does make debugging a *lot* easier if you print out the completed
                 // buffer for debugging.
                 buffer.append(line + "\n");
             }
 
-            if (buffer.length() == 0) {
+            if (buffer.length() == 0)
+            {
                 // Stream was empty.  No point in parsing.
                 return null;
             }
             jsonStr = buffer.toString();
             getMovieDataFromJson(jsonStr);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             Log.e("PlaceholderFragment", "Error ", e);
             // If the code didn't successfully get the weather data, there's no point in attemping
             // to parse it.
             return null;
-        } finally{
-            if (urlConnection != null) {
+        }
+        finally
+        {
+            if (urlConnection != null)
+            {
                 urlConnection.disconnect();
             }
-            if (reader != null) {
-                try {
+            if (reader != null)
+            {
+                try
+                {
                     reader.close();
-                } catch (final IOException e) {
+                }
+                catch (final IOException e)
+                {
                     Log.e("PlaceholderFragment", "Error closing stream", e);
                 }
             }
@@ -136,24 +140,11 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
         return mMovies;
     }
 
-    /**
-     * Take the String representing the complete forecast in JSON Format and
-     * pull out the data we need to construct the Strings needed for the wireframes.
-     *
-     * Fortunately parsing is easy:  constructor takes the JSON string and converts it
-     * into an Object hierarchy for us.
-     */
+
     private void getMovieDataFromJson(String jsonStr)
             throws JSONException
     {
-
-        // Now we have a String representing the complete forecast in JSON Format.
-        // Fortunately parsing is easy:  constructor takes the JSON string and converts it
-        // into an Object hierarchy for us.
-
         // These are the names of the JSON objects that need to be extracted.
-
-        // Location information
         final String OWM_ID = "id";
         final String OWM_RESULTS = "results";
         final String OWM_OVERVIEW = "overview";
@@ -162,7 +153,8 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
         final String OWM_TITLE = "title";
         final String OWM_VOTE_AVERAGE = "vote_average";
 
-        try {
+        try
+        {
             JSONObject json = new JSONObject(jsonStr);
             JSONArray jsonArray = json.getJSONArray(OWM_RESULTS);
             Movie movie;
@@ -195,24 +187,15 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
         }
     }
 
-    /**
-     * Take the String representing the complete forecast in JSON Format and
-     * pull out the data we need to construct the Strings needed for the wireframes.
-     *
-     * Fortunately parsing is easy:  constructor takes the JSON string and converts it
-     * into an Object hierarchy for us.
-     */
+
     private ArrayList<Trailer> getTrailerDataFromJson(String jsonStr)
             throws JSONException
     {
-
         // Now we have a String representing the complete forecast in JSON Format.
         // Fortunately parsing is easy:  constructor takes the JSON string and converts it
         // into an Object hierarchy for us.
 
         // These are the names of the JSON objects that need to be extracted.
-
-        // Location information
         final String OWM_ID = "id";
         final String OWM_RESULTS = "results";
         final String OWM_iso_639_1 = "iso_639_1";
@@ -224,7 +207,8 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
 
         ArrayList<Trailer> returnVal = new ArrayList<Trailer>();
 
-        try {
+        try
+        {
             JSONObject json = new JSONObject(jsonStr);
             JSONArray jsonArray = json.getJSONArray(OWM_RESULTS);
             Trailer trailer;
@@ -266,28 +250,27 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
     private String getRunningTimeDataFromJson(String jsonStr)
             throws JSONException
     {
-
         // Now we have a String representing the complete forecast in JSON Format.
         // Fortunately parsing is easy:  constructor takes the JSON string and converts it
         // into an Object hierarchy for us.
 
         // These are the names of the JSON objects that need to be extracted.
-
-        // Location information
         final String OWM_ID = "id";
         final String OWM_RESULTS = "results";
         final String OWM_RUNTIME = "runtime";
 
         String returnVal = "";
 
-        try {
+        try
+        {
             JSONObject json = new JSONObject(jsonStr);
 
             returnVal        =   json.getString(OWM_RUNTIME);
 
             Log.d(LOG_TAG, "FetchRuntimeTask Complete. " + "inserted" + " Inserted");
 
-        } catch (JSONException e) {
+        } catch (JSONException e)
+        {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
         }
@@ -305,10 +288,8 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
         // Will contain the raw JSON response as a string.
         String jsonStr = null;
 
-        try {
-            // Construct the URL for the OpenWeatherMap query
-            // Possible parameters are avaiable at OWM's forecast API page, at
-            // http://openweathermap.org/API#forecast
+        try
+        {
             ((MainActivity)mContext).mSort = Utility.getCurrentSort(mContext);
             URL url;
             url = new URL(mContext.getString(R.string.api_trailers_url)
@@ -323,39 +304,51 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
             // Read the input stream into a String
             InputStream inputStream = urlConnection.getInputStream();
             StringBuffer buffer = new StringBuffer();
-            if (inputStream == null) {
+            if (inputStream == null)
+            {
                 // Nothing to do.
                 return null;
             }
             reader = new BufferedReader(new InputStreamReader(inputStream));
 
             String line;
-            while ((line = reader.readLine()) != null) {
+            while ((line = reader.readLine()) != null)
+            {
                 // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
                 // But it does make debugging a *lot* easier if you print out the completed
                 // buffer for debugging.
                 buffer.append(line + "\n");
             }
 
-            if (buffer.length() == 0) {
+            if (buffer.length() == 0)
+            {
                 // Stream was empty.  No point in parsing.
                 return null;
             }
             jsonStr = buffer.toString();
             returnVal = getTrailerDataFromJson(jsonStr);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             Log.e("PlaceholderFragment", "Error ", e);
             // If the code didn't successfully get the weather data, there's no point in attemping
             // to parse it.
             return null;
-        } finally{
-            if (urlConnection != null) {
+        }
+        finally
+        {
+            if (urlConnection != null)
+            {
                 urlConnection.disconnect();
             }
-            if (reader != null) {
-                try {
+            if (reader != null)
+            {
+                try
+                {
                     reader.close();
-                } catch (final IOException e) {
+                }
+                catch (final IOException e)
+                {
                     Log.e("PlaceholderFragment", "Error closing stream", e);
                 }
             }
@@ -375,10 +368,8 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
         // Will contain the raw JSON response as a string.
         String jsonStr = null;
 
-        try {
-            // Construct the URL for the OpenWeatherMap query
-            // Possible parameters are avaiable at OWM's forecast API page, at
-            // http://openweathermap.org/API#forecast
+        try
+        {
             URL url;
             url = new URL(mContext.getString(R.string.api_movie_url)
                                   .replace(mContext.getString(R.string.api_id_placeholder), movieID)
@@ -392,39 +383,51 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
             // Read the input stream into a String
             InputStream inputStream = urlConnection.getInputStream();
             StringBuffer buffer = new StringBuffer();
-            if (inputStream == null) {
+            if (inputStream == null)
+            {
                 // Nothing to do.
                 return null;
             }
             reader = new BufferedReader(new InputStreamReader(inputStream));
 
             String line;
-            while ((line = reader.readLine()) != null) {
+            while ((line = reader.readLine()) != null)
+            {
                 // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
                 // But it does make debugging a *lot* easier if you print out the completed
                 // buffer for debugging.
                 buffer.append(line + "\n");
             }
 
-            if (buffer.length() == 0) {
+            if (buffer.length() == 0)
+            {
                 // Stream was empty.  No point in parsing.
                 return null;
             }
             jsonStr = buffer.toString();
             returnVal = getRunningTimeDataFromJson(jsonStr);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             Log.e("PlaceholderFragment", "Error ", e);
             // If the code didn't successfully get the weather data, there's no point in attemping
             // to parse it.
             return null;
-        } finally{
-            if (urlConnection != null) {
+        }
+        finally
+        {
+            if (urlConnection != null)
+            {
                 urlConnection.disconnect();
             }
-            if (reader != null) {
-                try {
+            if (reader != null)
+            {
+                try
+                {
                     reader.close();
-                } catch (final IOException e) {
+                }
+                catch (final IOException e)
+                {
                     Log.e("PlaceholderFragment", "Error closing stream", e);
                 }
             }
@@ -432,5 +435,4 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
 
         return returnVal;
     }
-
 }

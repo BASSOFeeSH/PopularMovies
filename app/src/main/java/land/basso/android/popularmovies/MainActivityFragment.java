@@ -58,14 +58,11 @@ public class MainActivityFragment extends Fragment
         String sortSetting = Utility.getCurrentSort(getActivity());
         String currentSort = ((MainActivity)getActivity()).mSort;
 
-//        GridView posterGrid = (GridView) getActivity().findViewById(R.id.main_fragment_grid);
-//        posterGrid.setAdapter(new ImageAdapter(getActivity()));
         if(mGridView.getAdapter() == null)
         {   mGridView.setAdapter(new ImageAdapter(getActivity()));  }
 
         if(sortSetting != currentSort)
         {
-//            posterGrid.removeAllViews();
             mPosition = GridView.INVALID_POSITION;
             updateGrid();
         }
@@ -107,14 +104,6 @@ public class MainActivityFragment extends Fragment
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l)
             {
-                 //TODO
-                Toast.makeText(getActivity().getApplicationContext(), ((MainActivity)getActivity()).mMovies.get(position).title, Toast.LENGTH_SHORT).show();
-//                    String locationSetting = Utility.getPreferredLocation(getActivity());
-//                    ((Callback) getActivity())
-//                            .onItemSelected(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(
-//                                    locationSetting, cursor.getLong(COL_WEATHER_DATE)
-//                    ));
-//                }
                 mPosition = position;
                 ((MainActivity)getActivity()).showDetailsForMovie(position);
             }
@@ -126,7 +115,6 @@ public class MainActivityFragment extends Fragment
             mPosition = savedInstanceState.getInt(SELECTED_KEY);
         }
 
-//        updateGrid();
         return rootView;
     }
 }

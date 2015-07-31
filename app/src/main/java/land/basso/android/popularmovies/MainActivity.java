@@ -28,22 +28,12 @@ public class MainActivity   extends     ActionBarActivity
         ft.add(R.id.fragment, fragment);
 //        ft.addToBackStack("Main");
         ft.commit();
-
-//        mSort = Utility.getCurrentSort(this);
-//
-//        GridView posterGrid = (GridView) findViewById(R.id.main_fragment_grid);
-//        posterGrid.setAdapter(new ImageAdapter(this));
     }
 
     @Override
     protected void onStart()
     {
         super.onStart();
-
-//        mSort = Utility.getCurrentSort(this);
-
-//        GridView posterGrid = (GridView) findViewById(R.id.main_fragment_grid);
-//        posterGrid.setAdapter(new ImageAdapter(this));
     }
 
     @Override

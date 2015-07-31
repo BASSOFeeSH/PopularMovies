@@ -14,7 +14,8 @@ public class ImageAdapter extends BaseAdapter
 {
     private Context mContext;
 
-    public ImageAdapter(Context c) {
+    public ImageAdapter(Context c)
+    {
         mContext = c;
     }
 
@@ -26,11 +27,13 @@ public class ImageAdapter extends BaseAdapter
             return ((MainActivity)mContext).mMovies.size();
     }
 
-    public Object getItem(int position) {
+    public Object getItem(int position)
+    {
         return null;
     }
 
-    public long getItemId(int position) {
+    public long getItemId(int position)
+    {
         return 0;
     }
 
@@ -42,10 +45,6 @@ public class ImageAdapter extends BaseAdapter
         {
             // if it's not recycled, initialize some attributes
             imageView = new AspectRatioImageView(mContext);
-
-//            imageView.setLayoutParams(new GridView.LayoutParams(GridView.LayoutParams.WRAP_CONTENT, GridView.LayoutParams.WRAP_CONTENT));
-//            imageView.setLayoutParams(new GridView.LayoutParams(185, 185));
-//            imageView.setScaleType(ImageView.ScaleType.CENTER);
         } else
         {
             imageView = (AspectRatioImageView)convertView;
