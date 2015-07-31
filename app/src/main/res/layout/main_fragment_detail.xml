@@ -18,19 +18,17 @@
         android:text="Chappie"
         />
 
-
-
     <ScrollView
-        android:id="@+id/detail_layout_scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/detail_fragment_scrollview"
         >
 
         <LinearLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             tools:context="land.basso.android.popularmovies.MainActivityFragmentDetail">
 
@@ -41,11 +39,13 @@
                 android:orientation="horizontal"
                 >
 
-                <ImageView
+                <land.basso.android.popularmovies.AspectRatioImageView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/detail_poster"
                     android:src="@drawable/sample_poster"
+                    android:paddingLeft="@dimen/abc_action_bar_content_inset_material"
+                    android:paddingRight="@dimen/abc_action_bar_content_inset_material"
                     android:layout_weight="2"
                     />
 
@@ -56,6 +56,7 @@
                     android:orientation="vertical"
                     android:layout_weight="2"
                     android:gravity="center_vertical"
+                    android:padding="@dimen/abc_action_bar_content_inset_material"
                     >
 
                     <TextView
@@ -63,6 +64,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/abc_text_size_large_material"
+                        android:paddingBottom="10dp"
                         android:text="2015"
                         />
 
@@ -93,13 +95,13 @@
                         />
 
                 </LinearLayout>
-
             </LinearLayout>
 
             <TextView
                 android:id="@+id/detail_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="@dimen/abc_action_bar_content_inset_material"
                 android:text="Every child comes into the world full of promise, and none more so than Chappie: he is gifted, special, a prodigy Chapie he is a robot."
                 />
 
@@ -108,23 +110,21 @@
                 android:layout_height="2dp"
                 android:background="?android:attr/listDivider"/>
 
-            <TextView
-                android:id="@+id/detail_trailer_label"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:text="Trailers:"
-                />
+            <!--<TextView-->
+                <!--android:id="@+id/detail_trailer_label"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:textSize="20sp"-->
+                <!--android:text="Trailers:"-->
+                <!--/>-->
 
-            <ListView
-                android:id="@+id/detail_list_trailers"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:listitem="@layout/detail_trailer_list_item"
-                ></ListView>
-
+            <!--<ListView-->
+                <!--android:id="@+id/detail_list_trailers"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:paddingBottom="10dp"-->
+                <!--tools:listitem="@layout/detail_trailer_list_item"-->
+                <!--></ListView>-->
         </LinearLayout>
-
     </ScrollView>
-
 </LinearLayout>

@@ -96,7 +96,7 @@ public class MainActivityFragmentDetail extends Fragment
         title.setText(movie.title);
         year.setText(movie.releaseDate);
         time.setText(movie.runningTime + "min");
-        rating.setText(movie.rating);
+        rating.setText(movie.rating + "/10");
         overview.setText(movie.overview);
         Picasso.with(getActivity()).load(movie.posterURL).into(poster);
 
