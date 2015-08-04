@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 
@@ -61,7 +62,7 @@ public class MainActivityFragment extends Fragment
         if(mGridView.getAdapter() == null)
         {   mGridView.setAdapter(new ImageAdapter(getActivity()));  }
 
-        if(sortSetting != currentSort)
+        if(!sortSetting.equals(currentSort))
         {
             mPosition = GridView.INVALID_POSITION;
             updateGrid();
@@ -77,6 +78,10 @@ public class MainActivityFragment extends Fragment
     {
         try
         {
+            ProgressBar progressBar = (ProgressBar)getActivity().findViewById(R.id.main_fragment_progress);
+            progressBar.setIndeterminate(true);
+            progressBar.setVisibility(View.VISIBLE);
+
             mGridView.invalidateViews();
             FetchMoviesTask task = new FetchMoviesTask(getActivity(), mPosition);
             task.execute();
@@ -86,7 +91,6 @@ public class MainActivityFragment extends Fragment
             Toast.makeText(getActivity().getApplicationContext(), exc.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)

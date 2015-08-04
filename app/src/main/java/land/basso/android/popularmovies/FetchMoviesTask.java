@@ -3,7 +3,9 @@ package land.basso.android.popularmovies;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 import android.widget.GridView;
+import android.widget.ProgressBar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,10 +25,10 @@ import java.util.ArrayList;
 public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
 {
 
-    private final String LOG_TAG = FetchMoviesTask.class.getSimpleName();
-    private final Context mContext;
-    private final int     mPosition;
-    private ArrayList<Movie> mMovies;
+    private final String        LOG_TAG = FetchMoviesTask.class.getSimpleName();
+    private final Context       mContext;
+    private final int           mPosition;
+    private ArrayList<Movie>    mMovies;
 
     public FetchMoviesTask(Context context, int position)
     {
@@ -45,12 +47,20 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
         GridView posterGrid = (GridView)((MainActivity) mContext).findViewById(R.id.main_fragment_grid);
         posterGrid.invalidateViews();
         if(mPosition != GridView.INVALID_POSITION) {    posterGrid.smoothScrollToPosition(mPosition);   }
+
+        hideProgressSpinner();
+    }
+
+    private void hideProgressSpinner()
+    {
+        ProgressBar progressBar = (ProgressBar)(((MainActivity)mContext).findViewById(R.id.main_fragment_progress));
+        progressBar.setIndeterminate(true);
+        progressBar.setVisibility(View.INVISIBLE);
     }
 
     @Override
     protected ArrayList<Movie> doInBackground(Void... params)
     {
-
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
         HttpURLConnection urlConnection = null;
@@ -63,7 +73,7 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
         {
             ((MainActivity)mContext).mSort = Utility.getCurrentSort(mContext);
             URL url;
-            if(Utility.isSortByPopularity(mContext) == true)
+            if(Utility.isSortByPopularity(mContext))
             {//i.e. URL url = new URL("http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=cc363d0ba96599c03d034675c48f570a");
                 url = new URL(mContext.getString(R.string.api_discover_url)
                                 .replace(mContext.getString(R.string.api_sort_placeholder), mContext.getString(R.string.api_sort_by_popularity))
