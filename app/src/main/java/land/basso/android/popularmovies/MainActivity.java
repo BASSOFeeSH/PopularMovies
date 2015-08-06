@@ -14,8 +14,10 @@ import java.util.ArrayList;
 public class MainActivity   extends     ActionBarActivity
                             implements  MainActivityFragmentDetail.OnFragmentInteractionListener
 {
-    public ArrayList<Movie> mMovies;
-    public String mSort;
+    public ArrayList<Movie>     mMovies;
+    public String               mSort;
+    public boolean              mTwoPane = false;
+    private static final String DETAILFRAGMENT_TAG = "DFTAG";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -23,11 +25,29 @@ public class MainActivity   extends     ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
+        //Main fragment
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         MainActivityFragment fragment = new MainActivityFragment();
         ft.add(R.id.fragment, fragment);
 //        ft.addToBackStack("Main");
         ft.commit();
+
+        //detail fragment ONLY if two-pane view
+        if(findViewById(R.id.fragmentDetail) != null)
+        {
+            mTwoPane = true;
+//            if (savedInstanceState == null)
+//            {
+//                getSupportFragmentManager().beginTransaction()
+//                                           .replace(R.id.fragmentDetail, new MainActivityFragmentDetail(), DETAILFRAGMENT_TAG)
+//                                           .commit();
+//            }
+        }
+        else
+        {
+            mTwoPane = false;
+
+        }
     }
 
     @Override
@@ -64,12 +84,24 @@ public class MainActivity   extends     ActionBarActivity
 
     public void showDetailsForMovie(int position)
     {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        MainActivityFragmentDetail fragment = new MainActivityFragmentDetail(position);
-        ft.replace(R.id.fragment, fragment);
-        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        ft.addToBackStack("Detail");
-        ft.commit();
+        if(mTwoPane == false)
+        {
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            MainActivityFragmentDetail fragment = new MainActivityFragmentDetail(position);
+            ft.replace(R.id.fragment, fragment);
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+            ft.addToBackStack("Detail");
+            ft.commit();
+        }
+        else
+        {
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            MainActivityFragmentDetail fragment = new MainActivityFragmentDetail(position);
+            ft.replace(R.id.fragmentDetail, fragment);
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+            ft.addToBackStack("Detail");
+            ft.commit();
+        }
     }
 
     @Override
