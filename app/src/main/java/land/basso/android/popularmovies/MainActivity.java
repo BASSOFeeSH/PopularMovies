@@ -17,11 +17,22 @@ public class MainActivity   extends     ActionBarActivity
     public ArrayList<Movie> mMovies;
     public String mSort;
 
+    private boolean mTwoPane;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
+
+        if(findViewById(R.id.fragment_detail) != null)
+        {
+            mTwoPane = true;
+        }
+        else
+        {
+            mTwoPane = false;
+        }
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         MainActivityFragment fragment = new MainActivityFragment();
@@ -66,7 +77,14 @@ public class MainActivity   extends     ActionBarActivity
     {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         MainActivityFragmentDetail fragment = new MainActivityFragmentDetail(position);
-        ft.replace(R.id.fragment, fragment);
+        if(mTwoPane)
+        {
+            ft.replace(R.id.fragment_detail, fragment);
+        }
+        else
+        {
+            ft.replace(R.id.fragment, fragment);
+        }
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.addToBackStack("Detail");
         ft.commit();
