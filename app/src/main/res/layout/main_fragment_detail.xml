@@ -85,14 +85,14 @@
                         android:text="8.1/10"
                         />
 
-                    <Button
+                    <ToggleButton
                         android:id="@+id/detail_button_favorite"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="#86e4db"
-                        android:textColor="#444444"
-                        android:text="MARK AS \nFAVORITE"
-                        />
+                        android:background="@drawable/favorite_toggle"
+                        android:textOff=""
+                        android:textOn=""
+                        android:layout_gravity="left"/>
 
                 </LinearLayout>
             </LinearLayout>
