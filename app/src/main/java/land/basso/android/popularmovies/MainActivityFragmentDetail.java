@@ -1,14 +1,16 @@
 package land.basso.android.popularmovies;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.squareup.picasso.Picasso;
 
@@ -99,6 +101,45 @@ public class MainActivityFragmentDetail extends Fragment
         rating.setText(movie.rating + "/10");
         overview.setText(movie.overview);
         Picasso.with(getActivity()).load(movie.posterURL).into(poster);
+
+        // Get a reference to the ListView, and attach this adapter to it.
+        final ToggleButton toggle = (ToggleButton) rootView.findViewById(R.id.detail_button_favorite);
+        MainActivity m = (MainActivity)getActivity();
+        if(m.mFavorites.contains(Integer.parseInt(((Movie)((MainActivity)getActivity()).mMovies.get(mPosition)).ID)))
+        {
+            toggle.setChecked(true);
+        }
+        else
+        {
+            toggle.setChecked(false);
+        }
+
+        toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+        {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+            {
+                MainActivity m = (MainActivity)getActivity();
+                    if (isChecked)
+                    {
+                    if(!m.mFavorites.contains(Integer.parseInt(((Movie)((MainActivity)getActivity()).mMovies.get(mPosition)).ID)))
+                    {
+                        m.mFavorites.add(Integer.parseInt(((Movie)m.mMovies.get(mPosition)).ID));
+                        TinyDB tiny = new TinyDB(m);
+                        tiny.putListInt(getString(R.string.favorites_list_key), m.mFavorites);
+                    }
+                }
+                else
+                {
+                    if(m.mFavorites.contains(Integer.parseInt(((Movie)((MainActivity)getActivity()).mMovies
+                            .get(mPosition)).ID)))
+                    {
+                        m.mFavorites.remove(Integer.parseInt(((Movie)m.mMovies.get(mPosition)).ID));
+                        TinyDB tiny = new TinyDB(m);
+                        tiny.putListInt(getString(R.string.favorites_list_key), m.mFavorites);
+                    }
+                }
+            }
+        });
 
         return  rootView;
     }

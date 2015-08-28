@@ -14,8 +14,9 @@ import java.util.ArrayList;
 public class MainActivity   extends     ActionBarActivity
                             implements  MainActivityFragmentDetail.OnFragmentInteractionListener
 {
-    public ArrayList<Movie> mMovies;
-    public String mSort;
+    public ArrayList<Movie>     mMovies;
+    public ArrayList<Integer>   mFavorites;
+    public String               mSort;
 
     private boolean mTwoPane;
 
@@ -24,6 +25,12 @@ public class MainActivity   extends     ActionBarActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
+
+        if(mFavorites == null )
+        {
+            TinyDB tinyDB = new TinyDB(this);
+            mFavorites = tinyDB.getListInt(getString(R.string.favorites_list_key));
+        }
 
         if(findViewById(R.id.fragment_detail) != null)
         {
