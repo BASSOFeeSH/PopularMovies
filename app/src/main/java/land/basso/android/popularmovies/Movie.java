@@ -15,4 +15,5 @@ public class Movie
     public String rating;
     public String overview;
     public ArrayList<Trailer> trailers;
+    public ArrayList<Review> reviews;
 }

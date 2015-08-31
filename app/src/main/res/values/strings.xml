@@ -17,6 +17,7 @@
     <string name="api_key_placeholder">{KEY}</string>
     <string name="api_discover_url">http://api.themoviedb.org/3/discover/movie?&amp;include_video=true&amp;{SORT}&amp;{KEY}</string>
     <string name="api_trailers_url">http://api.themoviedb.org/3/movie/{ID}/videos?&amp;{KEY}</string>
+    <string name="api_reviews_url">http://api.themoviedb.org/3/movie/{ID}/reviews?&amp;{KEY}</string>
     <string name="api_movie_url">http://api.themoviedb.org/3/movie/{ID}?&amp;{KEY}</string>
     <string name="api_sort_by_popularity">sort_by=popularity.desc</string>
     <string name="api_sort_by_rating">sort_by=vote_average.desc</string>

@@ -184,6 +184,7 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
                 movie.title         =   rec.getString(OWM_TITLE);
                 movie.rating        =   rec.getString(OWM_VOTE_AVERAGE);
                 movie.trailers      =   getTrailersForMovie(movie.ID);
+                movie.reviews       =   getReviewsForMovie(movie.ID);
                 movie.runningTime   =   getRunningTimeForMovie(movie.ID);
 
                 mMovies.add(movie);
@@ -240,6 +241,55 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
             }
 
             Log.d(LOG_TAG, "FetchMobiesTask Complete. " + "inserted" + " Inserted");
+
+        } catch (JSONException e) {
+            Log.e(LOG_TAG, e.getMessage(), e);
+            e.printStackTrace();
+        }
+
+        return returnVal;
+    }
+
+
+
+
+    private ArrayList<Review> getReviewDataFromJson(String jsonStr)
+            throws JSONException
+    {
+        // Now we have a String representing the complete forecast in JSON Format.
+        // Fortunately parsing is easy:  constructor takes the JSON string and converts it
+        // into an Object hierarchy for us.
+
+        // These are the names of the JSON objects that need to be extracted.
+        final String OWM_ID = "id";
+        final String OWM_RESULTS = "results";
+        final String OWM_iso_639_1 = "iso_639_1";
+        final String OWM_URL = "url";
+        final String OWM_AUTHOR = "author";
+        final String OWM_CONTENT = "content";
+
+        ArrayList<Review> returnVal = new ArrayList<Review>();
+
+        try
+        {
+            JSONObject json = new JSONObject(jsonStr);
+            JSONArray jsonArray = json.getJSONArray(OWM_RESULTS);
+            Review review;
+
+            for(int i = 0; i < jsonArray.length(); i++)
+            {
+               review = new Review();
+                JSONObject rec = jsonArray.getJSONObject(i);
+
+                review.id          =   rec.getString(OWM_ID);
+                review.url         =   rec.getString(OWM_URL);
+                review.author       =   rec.getString(OWM_AUTHOR);
+                review.content       =   rec.getString(OWM_CONTENT);
+
+                returnVal.add(review);
+            }
+
+            Log.d(LOG_TAG, "FetchReviewsTask Complete. " + "inserted" + " Inserted");
 
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
@@ -337,6 +387,87 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
             }
             jsonStr = buffer.toString();
             returnVal = getTrailerDataFromJson(jsonStr);
+        }
+        catch (Exception e)
+        {
+            Log.e("PlaceholderFragment", "Error ", e);
+            // If the code didn't successfully get the weather data, there's no point in attemping
+            // to parse it.
+            return null;
+        }
+        finally
+        {
+            if (urlConnection != null)
+            {
+                urlConnection.disconnect();
+            }
+            if (reader != null)
+            {
+                try
+                {
+                    reader.close();
+                }
+                catch (final IOException e)
+                {
+                    Log.e("PlaceholderFragment", "Error closing stream", e);
+                }
+            }
+        }
+
+        return returnVal;
+    }
+
+
+
+    protected  ArrayList<Review> getReviewsForMovie(String movieID)
+    {
+        ArrayList<Review> returnVal = new ArrayList<Review>();
+
+        HttpURLConnection urlConnection = null;
+        BufferedReader reader = null;
+
+        // Will contain the raw JSON response as a string.
+        String jsonStr = null;
+
+        try
+        {
+            ((MainActivity)mContext).mSort = Utility.getCurrentSort(mContext);
+            URL url;
+            url = new URL(mContext.getString(R.string.api_reviews_url)
+                                  .replace(mContext.getString(R.string.api_id_placeholder), movieID)
+                                  .replace(mContext.getString(R.string.api_key_placeholder), mContext.getString(R.string.api_key)));
+
+            // Create the request to OpenWeatherMap, and open the connection
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.connect();
+
+            // Read the input stream into a String
+            InputStream inputStream = urlConnection.getInputStream();
+            StringBuffer buffer = new StringBuffer();
+            if (inputStream == null)
+            {
+                // Nothing to do.
+                return null;
+            }
+            reader = new BufferedReader(new InputStreamReader(inputStream));
+
+            String line;
+            while ((line = reader.readLine()) != null)
+            {
+                // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
+                // But it does make debugging a *lot* easier if you print out the completed
+                // buffer for debugging.
+                buffer.append(line + "\n");
+            }
+
+            if (buffer.length() == 0)
+            {
+                // Stream was empty.  No point in parsing.
+                return null;
+            }
+            jsonStr = buffer.toString();
+            returnVal = getReviewDataFromJson(jsonStr);
         }
         catch (Exception e)
         {
