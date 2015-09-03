@@ -110,21 +110,21 @@
                 android:layout_height="2dp"
                 android:background="?android:attr/listDivider"/>
 
-            <!--<TextView-->
-                <!--android:id="@+id/detail_trailer_label"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:textSize="20sp"-->
-                <!--android:text="Trailers:"-->
-                <!--/>-->
+            <TextView
+                android:id="@+id/detail_trailer_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="Trailers:"
+                />
 
-            <!--<ListView-->
-                <!--android:id="@+id/detail_list_trailers"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:paddingBottom="10dp"-->
-                <!--tools:listitem="@layout/detail_trailer_list_item"-->
-                <!--></ListView>-->
+            <ListView
+                android:id="@+id/detail_list_trailers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                tools:listitem="@layout/detail_trailer_list_item"
+                ></ListView>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

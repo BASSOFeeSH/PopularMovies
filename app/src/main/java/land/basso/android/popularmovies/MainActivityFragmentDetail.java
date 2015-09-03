@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -35,6 +36,8 @@ public class MainActivityFragmentDetail extends Fragment
     private String mParam2;
 
     private int mPosition;
+    private Movie mMovie;
+    private ListView mTrailerListView;
 
     private OnFragmentInteractionListener mListener;
 
@@ -84,23 +87,26 @@ public class MainActivityFragmentDetail extends Fragment
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.main_fragment_detail, container, false);
 
-        Movie movie = ((MainActivity)getActivity()).mMovies.get(mPosition);
+        mMovie = ((MainActivity)getActivity()).mMovies.get(mPosition);
+
+        TrailerArrayAdapter mTrailerAdapter;
 
         MainActivity context = (MainActivity)getActivity();
 
-        TextView    title   = (TextView)rootView.findViewById(R.id.detail_title);
-        TextView    year   = (TextView)rootView.findViewById(R.id.detail_release_date);
-        TextView    time   = (TextView)rootView.findViewById(R.id.detail_running_time);
-        TextView    rating  = (TextView)rootView.findViewById(R.id.detail_rating);
-        TextView    overview   = (TextView)rootView.findViewById(R.id.detail_description);
-        ImageView   poster  = (ImageView)rootView.findViewById(R.id.detail_poster);
+        TextView    title       = (TextView)rootView.findViewById(R.id.detail_title);
+        TextView    year        = (TextView)rootView.findViewById(R.id.detail_release_date);
+        TextView    time        = (TextView)rootView.findViewById(R.id.detail_running_time);
+        TextView    rating      = (TextView)rootView.findViewById(R.id.detail_rating);
+        TextView    overview    = (TextView)rootView.findViewById(R.id.detail_description);
+        ImageView   poster      = (ImageView)rootView.findViewById(R.id.detail_poster);
+        mTrailerListView        = (ListView)rootView.findViewById(R.id.detail_list_trailers);
 
-        title.setText(movie.title);
-        year.setText(movie.releaseDate);
-        time.setText(movie.runningTime + "min");
-        rating.setText(movie.rating + "/10");
-        overview.setText(movie.overview);
-        Picasso.with(getActivity()).load(movie.posterURL).into(poster);
+        title.setText(mMovie.title);
+        year.setText(mMovie.releaseDate);
+        time.setText(mMovie.runningTime + "min");
+        rating.setText(mMovie.rating + "/10");
+        overview.setText(mMovie.overview);
+        Picasso.with(getActivity()).load(mMovie.posterURL).into(poster);
 
         // Get a reference to the ListView, and attach this adapter to it.
         final ToggleButton toggle = (ToggleButton) rootView.findViewById(R.id.detail_button_favorite);
@@ -141,7 +147,18 @@ public class MainActivityFragmentDetail extends Fragment
             }
         });
 
+        mTrailerAdapter = new TrailerArrayAdapter(getActivity(), R.id.detail_list_trailers, mMovie.trailers);
+
         return  rootView;
+    }
+
+    @Override
+    public void onResume()
+    {
+        if(mTrailerListView.getAdapter() == null)
+        {   mTrailerListView.setAdapter(new TrailerArrayAdapter(getActivity(), R.id.detail_list_trailers, mMovie.trailers ));  }
+
+        super.onResume();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
