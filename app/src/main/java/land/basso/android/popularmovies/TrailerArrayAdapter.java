@@ -19,7 +19,8 @@ public class TrailerArrayAdapter    extends ArrayAdapter<Trailer>
     int layoutResourceId;
     ArrayList<Trailer> data;
 
-    public TrailerArrayAdapter (Context mContext, int layoutResourceId, ArrayList<Trailer> data) {
+    public TrailerArrayAdapter(Context mContext, int layoutResourceId, ArrayList<Trailer> data)
+    {
 
         super(mContext, layoutResourceId, data);
 
@@ -29,7 +30,8 @@ public class TrailerArrayAdapter    extends ArrayAdapter<Trailer>
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent)
+    {
 
         /*
          * The convertView argument is essentially a "ScrapView" as described is Lucas post
@@ -37,7 +39,8 @@ public class TrailerArrayAdapter    extends ArrayAdapter<Trailer>
          * It will have a non-null value when ListView is asking you recycle the row layout.
          * So, when convertView is not null, you should simply update its contents instead of inflating a new row layout.
          */
-        if(convertView==null){
+        if (convertView == null)
+        {
             // inflate the layout
             LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
 //            convertView = inflater.inflate(layoutResourceId, parent, false);
@@ -50,9 +53,10 @@ public class TrailerArrayAdapter    extends ArrayAdapter<Trailer>
         // get the TextView and then set the text (item name) and tag (item ID) values
         TextView textViewItem = (TextView) convertView.findViewById(R.id.detail_trailer_list_name);
         textViewItem.setText(trailer.name);
-        textViewItem.setTag(trailer.id);
+        textViewItem.setTag(trailer.url);
 
         return convertView;
 
     }
+
 }

@@ -4,7 +4,8 @@
     android:id="@+id/detail_trailer_list_item"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,11 +31,5 @@
             />
 
     </LinearLayout>
-
-    <!--<View-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="1dp"-->
-        <!--android:paddingTop="3dp"-->
-        <!--android:background="?android:attr/listDivider"/>-->
 
 </LinearLayout>

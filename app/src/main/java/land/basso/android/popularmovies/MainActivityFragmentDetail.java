@@ -2,15 +2,18 @@ package land.basso.android.popularmovies;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.squareup.picasso.Picasso;
@@ -149,6 +152,26 @@ public class MainActivityFragmentDetail extends Fragment
 
         mTrailerAdapter = new TrailerArrayAdapter(getActivity(), R.id.detail_list_trailers, mMovie.trailers);
 
+        mTrailerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+
+                Context context = view.getContext();
+
+                TextView textViewItem = ((TextView) view.findViewById(R.id.detail_trailer_list_name));
+
+                // get the clicked item name
+                String listItemText = textViewItem.getText().toString();
+
+                // get the clicked item ID
+                String listItemId = textViewItem.getTag().toString();
+
+                // just toast it
+                Toast.makeText(context, "Item: " + listItemText + ", Item ID: " + listItemId, Toast.LENGTH_SHORT).show();
+            }
+        });
+
         return  rootView;
     }
 
@@ -156,7 +179,9 @@ public class MainActivityFragmentDetail extends Fragment
     public void onResume()
     {
         if(mTrailerListView.getAdapter() == null)
-        {   mTrailerListView.setAdapter(new TrailerArrayAdapter(getActivity(), R.id.detail_list_trailers, mMovie.trailers ));  }
+        {
+            mTrailerListView.setAdapter(new TrailerArrayAdapter(getActivity(), R.id.detail_list_trailers, mMovie.trailers));
+        }
 
         Utility.setListViewHeightBasedOnChildren(mTrailerListView);
 
