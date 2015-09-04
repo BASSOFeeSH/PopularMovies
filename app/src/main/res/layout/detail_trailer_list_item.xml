@@ -31,10 +31,10 @@
 
     </LinearLayout>
 
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="2dp"
-        android:paddingTop="5dp"
-        android:background="?android:attr/listDivider"/>
+    <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="1dp"-->
+        <!--android:paddingTop="3dp"-->
+        <!--android:background="?android:attr/listDivider"/>-->
 
 </LinearLayout>

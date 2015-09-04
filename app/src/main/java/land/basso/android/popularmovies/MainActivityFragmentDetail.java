@@ -125,21 +125,21 @@ public class MainActivityFragmentDetail extends Fragment
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
             {
                 MainActivity m = (MainActivity)getActivity();
-                    if (isChecked)
+                int movieID = Integer.parseInt(((Movie)m.mMovies.get(mPosition)).ID);
+                if (isChecked)
+                {
+                    if(!m.mFavorites.contains(movieID))
                     {
-                    if(!m.mFavorites.contains(Integer.parseInt(((Movie)((MainActivity)getActivity()).mMovies.get(mPosition)).ID)))
-                    {
-                        m.mFavorites.add(Integer.parseInt(((Movie)m.mMovies.get(mPosition)).ID));
+                        m.mFavorites.add(m.mFavorites.indexOf(movieID));
                         TinyDB tiny = new TinyDB(m);
                         tiny.putListInt(getString(R.string.favorites_list_key), m.mFavorites);
                     }
                 }
                 else
                 {
-                    if(m.mFavorites.contains(Integer.parseInt(((Movie)((MainActivity)getActivity()).mMovies
-                            .get(mPosition)).ID)))
+                    if(m.mFavorites.contains(movieID))
                     {
-                        m.mFavorites.remove(Integer.parseInt(((Movie)m.mMovies.get(mPosition)).ID));
+                        m.mFavorites.remove(m.mFavorites.indexOf(movieID));
                         TinyDB tiny = new TinyDB(m);
                         tiny.putListInt(getString(R.string.favorites_list_key), m.mFavorites);
                     }
@@ -157,6 +157,8 @@ public class MainActivityFragmentDetail extends Fragment
     {
         if(mTrailerListView.getAdapter() == null)
         {   mTrailerListView.setAdapter(new TrailerArrayAdapter(getActivity(), R.id.detail_list_trailers, mMovie.trailers ));  }
+
+        Utility.setListViewHeightBasedOnChildren(mTrailerListView);
 
         super.onResume();
     }
