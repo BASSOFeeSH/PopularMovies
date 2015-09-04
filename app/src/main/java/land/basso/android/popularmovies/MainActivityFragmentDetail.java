@@ -41,6 +41,7 @@ public class MainActivityFragmentDetail extends Fragment
     private int mPosition;
     private Movie mMovie;
     private ListView mTrailerListView;
+    private ListView mReviewListView;
 
     private OnFragmentInteractionListener mListener;
 
@@ -93,6 +94,7 @@ public class MainActivityFragmentDetail extends Fragment
         mMovie = ((MainActivity)getActivity()).mMovies.get(mPosition);
 
         TrailerArrayAdapter mTrailerAdapter;
+        ReviewArrayAdapter mReviewAdapter;
 
         MainActivity context = (MainActivity)getActivity();
 
@@ -103,6 +105,7 @@ public class MainActivityFragmentDetail extends Fragment
         TextView    overview    = (TextView)rootView.findViewById(R.id.detail_description);
         ImageView   poster      = (ImageView)rootView.findViewById(R.id.detail_poster);
         mTrailerListView        = (ListView)rootView.findViewById(R.id.detail_list_trailers);
+        mReviewListView         = (ListView)rootView.findViewById(R.id.detail_list_reviews);
 
         title.setText(mMovie.title);
         year.setText(mMovie.releaseDate);
@@ -152,10 +155,12 @@ public class MainActivityFragmentDetail extends Fragment
 
         mTrailerAdapter = new TrailerArrayAdapter(getActivity(), R.id.detail_list_trailers, mMovie.trailers);
 
-        mTrailerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mTrailerListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
 
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l)
+            {
 
                 Context context = view.getContext();
 
@@ -167,6 +172,27 @@ public class MainActivityFragmentDetail extends Fragment
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
             }
         });
+
+
+
+        mReviewAdapter = new ReviewArrayAdapter(getActivity(), R.id.detail_list_reviews, mMovie.reviews);
+
+        mReviewListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+
+                Context context = view.getContext();
+
+                TextView review = ((TextView) view.findViewById(R.id.detail_review_list_author));
+
+                // get the clicked item ID
+                String url = review.getTag().toString();
+
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+            }
+        });
+
 
         return  rootView;
     }
@@ -180,6 +206,13 @@ public class MainActivityFragmentDetail extends Fragment
         }
 
         Utility.setListViewHeightBasedOnChildren(mTrailerListView);
+
+        if(mReviewListView.getAdapter() == null)
+        {
+            mReviewListView.setAdapter(new ReviewArrayAdapter(getActivity(), R.id.detail_list_reviews, mMovie.reviews));
+        }
+
+        Utility.setListViewHeightBasedOnChildren(mReviewListView);
 
         super.onResume();
     }

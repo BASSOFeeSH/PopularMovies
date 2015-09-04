@@ -134,6 +134,34 @@
                 android:layout_height="2dp"
                 android:background="?android:attr/listDivider"/>
 
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:background="?android:attr/listDivider"/>
+
+            <TextView
+
+                android:id="@+id/detail_review_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="Reviews:"
+                />
+
+            <ListView
+                android:id="@+id/detail_list_reviews"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight=".5"
+                android:paddingBottom="10dp"
+                tools:listitem="@layout/detail_review_list_item"
+                ></ListView>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:background="?android:attr/listDivider"/>
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
