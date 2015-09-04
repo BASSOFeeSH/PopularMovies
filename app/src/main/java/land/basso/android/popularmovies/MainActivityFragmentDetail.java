@@ -3,6 +3,7 @@ package land.basso.android.popularmovies;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,7 +14,6 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.squareup.picasso.Picasso;
@@ -159,16 +159,12 @@ public class MainActivityFragmentDetail extends Fragment
 
                 Context context = view.getContext();
 
-                TextView textViewItem = ((TextView) view.findViewById(R.id.detail_trailer_list_name));
-
-                // get the clicked item name
-                String listItemText = textViewItem.getText().toString();
+                TextView trailer = ((TextView) view.findViewById(R.id.detail_trailer_list_name));
 
                 // get the clicked item ID
-                String listItemId = textViewItem.getTag().toString();
+                String url = trailer.getTag().toString();
 
-                // just toast it
-                Toast.makeText(context, "Item: " + listItemText + ", Item ID: " + listItemId, Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
             }
         });
 

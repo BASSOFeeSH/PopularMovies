@@ -36,6 +36,11 @@ public class SettingsActivity   extends PreferenceActivity
      */
     private static final boolean ALWAYS_SIMPLE_PREFS = false;
 
+
+    //http://stackoverflow.com/questions/20954072/when-androids-isvalidfragment-from-preferenceactivity-gets-called
+    static final Class<?>[] INNER_CLASSES =
+            SettingsActivity.class.getDeclaredClasses();
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -225,7 +230,28 @@ public class SettingsActivity   extends PreferenceActivity
             //When their values change, their summaries are
             // updated to reflect the new value, per the Android Design
             // guidelines.
-            bindPreferenceSummaryToValue(findPreference("example_list"));
+//            bindPreferenceSummaryToValue(findPreference("example_list"));
+            bindPreferenceSummaryToValue(findPreference("sort"));
         }
+    }
+
+
+
+    @Override
+    protected boolean isValidFragment(String fragmentName) {
+
+        Boolean knownFrag = false;
+
+        for (Class<?> cls : INNER_CLASSES) {
+
+            if ( cls.getName().equals(fragmentName) ){
+
+                knownFrag = true;
+
+                break;
+            }
+        }
+
+        return knownFrag;
     }
 }
