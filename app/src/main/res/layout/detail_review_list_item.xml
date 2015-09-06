@@ -17,31 +17,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="20dp"
-            android:src="@mipmap/ic_play"
+            android:src="@drawable/ic_action_open_in_browser"
             />
 
         <TextView
-            android:id="@+id/detail_review_list_author"
+            android:id="@+id/detail_review_list_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="20dp"
             android:textSize="20sp"
-            android:text="John Doe says:"
+            android:text="The minions are a nice idea and..."
             android:layout_gravity="center_vertical"
             />
 
     </LinearLayout>
-
-
-
-    <TextView
-        android:id="@+id/detail_review_list_content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="20dp"
-        android:textSize="20sp"
-        android:text="The minions are a nice idea and..."
-        android:layout_gravity="center_vertical"
-        />
 
 </LinearLayout>

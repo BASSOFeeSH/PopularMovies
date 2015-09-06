@@ -136,7 +136,7 @@ public class MainActivityFragmentDetail extends Fragment
                 {
                     if(!m.mFavorites.contains(movieID))
                     {
-                        m.mFavorites.add(m.mFavorites.indexOf(movieID));
+                        m.mFavorites.add(movieID);
                         TinyDB tiny = new TinyDB(m);
                         tiny.putListInt(getString(R.string.favorites_list_key), m.mFavorites);
                     }
@@ -184,7 +184,7 @@ public class MainActivityFragmentDetail extends Fragment
 
                 Context context = view.getContext();
 
-                TextView review = ((TextView) view.findViewById(R.id.detail_review_list_author));
+                TextView review = ((TextView) view.findViewById(R.id.detail_review_list_content));
 
                 // get the clicked item ID
                 String url = review.getTag().toString();
@@ -200,19 +200,26 @@ public class MainActivityFragmentDetail extends Fragment
     @Override
     public void onResume()
     {
-        if(mTrailerListView.getAdapter() == null)
+        if(mMovie.trailers != null)
         {
-            mTrailerListView.setAdapter(new TrailerArrayAdapter(getActivity(), R.id.detail_list_trailers, mMovie.trailers));
+            if (mTrailerListView.getAdapter() == null)
+            {
+                mTrailerListView.setAdapter(new TrailerArrayAdapter(getActivity(), R.id.detail_list_trailers, mMovie.trailers));
+            }
+
+
+            Utility.setListViewHeightBasedOnChildren(mTrailerListView);
         }
 
-        Utility.setListViewHeightBasedOnChildren(mTrailerListView);
-
-        if(mReviewListView.getAdapter() == null)
+        if(mMovie.reviews != null)
         {
-            mReviewListView.setAdapter(new ReviewArrayAdapter(getActivity(), R.id.detail_list_reviews, mMovie.reviews));
-        }
+            if (mReviewListView.getAdapter() == null)
+            {
+                mReviewListView.setAdapter(new ReviewArrayAdapter(getActivity(), R.id.detail_list_reviews, mMovie.reviews));
+            }
 
-        Utility.setListViewHeightBasedOnChildren(mReviewListView);
+            Utility.setListViewHeightBasedOnChildren(mReviewListView);
+        }
 
         super.onResume();
     }

@@ -14,6 +14,6 @@ public class Movie
     public String runningTime;
     public String rating;
     public String overview;
-    public ArrayList<Trailer> trailers;
-    public ArrayList<Review> reviews;
+    public ArrayList<Trailer> trailers = new ArrayList<Trailer>();
+    public ArrayList<Review> reviews = new ArrayList<Review>();
 }

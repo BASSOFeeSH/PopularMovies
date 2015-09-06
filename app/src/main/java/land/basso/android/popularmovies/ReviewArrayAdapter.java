@@ -51,8 +51,10 @@ public class ReviewArrayAdapter    extends ArrayAdapter<Review>
         Review review = data.get(position);
 
         // get the TextView and then set the text (item name) and tag (item ID) values
-        TextView textViewItem = (TextView) convertView.findViewById(R.id.detail_review_list_author);
-        textViewItem.setText(review.author);
+        TextView textViewItem = (TextView) convertView.findViewById(R.id.detail_review_list_content);
+        int length = review.content.length();
+        if(length > 50) {   length = 50;    }
+        textViewItem.setText(review.content.substring(0, length) + "...");
         textViewItem.setTag(review.url);
 
         return convertView;
