@@ -24,8 +24,9 @@ public class Utility
     public static String getCurrentSort(Context context)
     {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getString(context.getString(R.string.pref_sort_key),
-                               context.getString(R.string.pref_sort_popular_value));
+        String returnVal = prefs.getString(context.getString(R.string.pref_sort_key),
+                                           context.getString(R.string.pref_sort_popular_value));
+        return returnVal;
     }
 
     public static void setListViewHeightBasedOnChildren(ListView listView) {

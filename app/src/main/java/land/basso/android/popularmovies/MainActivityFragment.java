@@ -83,8 +83,12 @@ public class MainActivityFragment extends Fragment
             progressBar.setVisibility(View.VISIBLE);
 
             mGridView.invalidateViews();
-            FetchMoviesTask task = new FetchMoviesTask(getActivity(), mPosition);
-            task.execute();
+            String currentSort = Utility.getCurrentSort(getActivity());
+            String sortSetting = getActivity().getString(R.string.pref_sort_favorite_value);
+            if(currentSort.equals(sortSetting))
+            {   FetchFavoritesTask task = new FetchFavoritesTask(getActivity(), mPosition); task.execute(); }
+            else
+            {   FetchMoviesTask task = new FetchMoviesTask(getActivity(), mPosition);   task.execute();}
         }
         catch(Exception exc)
         {

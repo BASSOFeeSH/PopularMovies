@@ -30,6 +30,11 @@ public class MainActivity   extends     ActionBarActivity
         {
             TinyDB tinyDB = new TinyDB(this);
             mFavorites = tinyDB.getListInt(getString(R.string.favorites_list_key));
+            for(int i = 0; i < mFavorites.size(); i++)
+            {
+                if(mFavorites.get(i) == -1) {   mFavorites.remove(i);   i = 0;   }
+            }
+            tinyDB.putListInt(getString(R.string.favorites_list_key), mFavorites);
         }
 
         if(findViewById(R.id.fragment_detail) != null)
