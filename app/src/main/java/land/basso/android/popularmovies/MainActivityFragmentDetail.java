@@ -112,7 +112,8 @@ public class MainActivityFragmentDetail extends Fragment
         time.setText(mMovie.runningTime + "min");
         rating.setText(mMovie.rating + "/10");
         overview.setText(mMovie.overview);
-        Picasso.with(getActivity()).load(mMovie.posterURL).into(poster);
+        if(mMovie.posterURL != null && mMovie.posterURL.length() > 0)
+        {   Picasso.with(getActivity()).load(mMovie.posterURL).into(poster);    }
 
         // Get a reference to the ListView, and attach this adapter to it.
         final ToggleButton toggle = (ToggleButton) rootView.findViewById(R.id.detail_button_favorite);
