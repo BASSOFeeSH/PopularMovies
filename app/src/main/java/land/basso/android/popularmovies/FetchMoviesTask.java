@@ -150,7 +150,6 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
         return mMovies;
     }
 
-
     private void getMovieDataFromJson(String jsonStr)
             throws JSONException
     {
@@ -197,7 +196,6 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
             e.printStackTrace();
         }
     }
-
 
     private ArrayList<Trailer> getTrailerDataFromJson(String jsonStr)
             throws JSONException
@@ -250,9 +248,6 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
         return returnVal;
     }
 
-
-
-
     private ArrayList<Review> getReviewDataFromJson(String jsonStr)
             throws JSONException
     {
@@ -298,7 +293,6 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
 
         return returnVal;
     }
-
 
     /**
      * Take the String representing the complete forecast in JSON Format and
@@ -417,8 +411,6 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
         return returnVal;
     }
 
-
-
     protected  ArrayList<Review> getReviewsForMovie(String movieID)
     {
         ArrayList<Review> returnVal = new ArrayList<Review>();
@@ -497,7 +489,6 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
 
         return returnVal;
     }
-
 
     protected  String getRunningTimeForMovie(String movieID)
     {

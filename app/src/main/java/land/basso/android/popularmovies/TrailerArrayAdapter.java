@@ -21,7 +21,6 @@ public class TrailerArrayAdapter    extends ArrayAdapter<Trailer>
 
     public TrailerArrayAdapter(Context mContext, int layoutResourceId, ArrayList<Trailer> data)
     {
-
         super(mContext, layoutResourceId, data);
 
         this.layoutResourceId = layoutResourceId;
@@ -32,7 +31,6 @@ public class TrailerArrayAdapter    extends ArrayAdapter<Trailer>
     @Override
     public View getView(int position, View convertView, ViewGroup parent)
     {
-
         /*
          * The convertView argument is essentially a "ScrapView" as described is Lucas post
          * http://lucasr.org/2012/04/05/performance-tips-for-androids-listview/
@@ -56,7 +54,6 @@ public class TrailerArrayAdapter    extends ArrayAdapter<Trailer>
         textViewItem.setTag(trailer.url);
 
         return convertView;
-
     }
 
 }

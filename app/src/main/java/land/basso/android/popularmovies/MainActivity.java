@@ -30,26 +30,22 @@ public class MainActivity   extends     ActionBarActivity
         {
             TinyDB tinyDB = new TinyDB(this);
             mFavorites = tinyDB.getListInt(getString(R.string.favorites_list_key));
+
+            //Had a bug at one point that was adding a bunch of '-1's, so this will clean them out
             for(int i = 0; i < mFavorites.size(); i++)
-            {
-                if(mFavorites.get(i) == -1) {   mFavorites.remove(i);   i = 0;   }
+            {   if(mFavorites.get(i) == -1) {   mFavorites.remove(i);   i = 0;   }
             }
             tinyDB.putListInt(getString(R.string.favorites_list_key), mFavorites);
         }
 
         if(findViewById(R.id.fragment_detail) != null)
-        {
-            mTwoPane = true;
-        }
+        {   mTwoPane = true;    }
         else
-        {
-            mTwoPane = false;
-        }
+        {   mTwoPane = false;   }
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         MainActivityFragment fragment = new MainActivityFragment();
         ft.add(R.id.fragment, fragment);
-//        ft.addToBackStack("Main");
         ft.commit();
     }
 
@@ -89,14 +85,12 @@ public class MainActivity   extends     ActionBarActivity
     {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         MainActivityFragmentDetail fragment = new MainActivityFragmentDetail(position);
+
         if(mTwoPane)
-        {
-            ft.replace(R.id.fragment_detail, fragment);
-        }
+        {   ft.replace(R.id.fragment_detail, fragment); }
         else
-        {
-            ft.replace(R.id.fragment, fragment);
-        }
+        {   ft.replace(R.id.fragment, fragment);    }
+
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.addToBackStack("Detail");
         ft.commit();
@@ -104,16 +98,13 @@ public class MainActivity   extends     ActionBarActivity
 
     @Override
     public void onBackPressed() {
-        if (getFragmentManager().getBackStackEntryCount() > 0) {
-            getFragmentManager().popBackStack();
-        } else {
-            super.onBackPressed();
-        }
+        if (getFragmentManager().getBackStackEntryCount() > 0)
+        {   getFragmentManager().popBackStack();    }
+        else
+        {   super.onBackPressed();  }
     }
 
     @Override
     public void onFragmentInteraction(Uri uri)
-    {
-
-    }
+    {    }
 }

@@ -29,6 +29,8 @@ public class Utility
         return returnVal;
     }
 
+    //It seems that a ListView inside of a ScrollView doesn't properly grow to wrap content.
+    //This was adapted to code found online to remedy this.
     public static void setListViewHeightBasedOnChildren(ListView listView) {
         ListAdapter listAdapter = listView.getAdapter();
         if (listAdapter == null) {

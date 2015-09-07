@@ -118,13 +118,9 @@ public class MainActivityFragmentDetail extends Fragment
         final ToggleButton toggle = (ToggleButton) rootView.findViewById(R.id.detail_button_favorite);
         MainActivity m = (MainActivity)getActivity();
         if(m.mFavorites.contains(Integer.parseInt(((Movie)((MainActivity)getActivity()).mMovies.get(mPosition)).ID)))
-        {
-            toggle.setChecked(true);
-        }
+        {   toggle.setChecked(true);    }
         else
-        {
-            toggle.setChecked(false);
-        }
+        {   toggle.setChecked(false);   }
 
         toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
         {
@@ -173,8 +169,6 @@ public class MainActivityFragmentDetail extends Fragment
             }
         });
 
-
-
         mReviewAdapter = new ReviewArrayAdapter(getActivity(), R.id.detail_list_reviews, mMovie.reviews);
 
         mReviewListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -193,7 +187,6 @@ public class MainActivityFragmentDetail extends Fragment
             }
         });
 
-
         return  rootView;
     }
 
@@ -203,9 +196,7 @@ public class MainActivityFragmentDetail extends Fragment
         if(mMovie.trailers != null)
         {
             if (mTrailerListView.getAdapter() == null)
-            {
-                mTrailerListView.setAdapter(new TrailerArrayAdapter(getActivity(), R.id.detail_list_trailers, mMovie.trailers));
-            }
+            {   mTrailerListView.setAdapter(new TrailerArrayAdapter(getActivity(), R.id.detail_list_trailers, mMovie.trailers));    }
 
 
             Utility.setListViewHeightBasedOnChildren(mTrailerListView);
@@ -214,9 +205,7 @@ public class MainActivityFragmentDetail extends Fragment
         if(mMovie.reviews != null)
         {
             if (mReviewListView.getAdapter() == null)
-            {
-                mReviewListView.setAdapter(new ReviewArrayAdapter(getActivity(), R.id.detail_list_reviews, mMovie.reviews));
-            }
+            {   mReviewListView.setAdapter(new ReviewArrayAdapter(getActivity(), R.id.detail_list_reviews, mMovie.reviews));    }
 
             Utility.setListViewHeightBasedOnChildren(mReviewListView);
         }
@@ -238,14 +227,9 @@ public class MainActivityFragmentDetail extends Fragment
     {
         super.onAttach(activity);
         try
-        {
-            mListener = (OnFragmentInteractionListener) activity;
-        }
+        {   mListener = (OnFragmentInteractionListener) activity;   }
         catch (ClassCastException e)
-        {
-            throw new ClassCastException(activity.toString()
-                                                 + " must implement OnFragmentInteractionListener");
-        }
+        {   throw new ClassCastException(activity.toString() + " must implement OnFragmentInteractionListener");    }
     }
 
     @Override

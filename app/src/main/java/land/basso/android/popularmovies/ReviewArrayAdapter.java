@@ -32,7 +32,6 @@ public class ReviewArrayAdapter    extends ArrayAdapter<Review>
     @Override
     public View getView(int position, View convertView, ViewGroup parent)
     {
-
         /*
          * The convertView argument is essentially a "ScrapView" as described is Lucas post
          * http://lucasr.org/2012/04/05/performance-tips-for-androids-listview/
@@ -43,7 +42,6 @@ public class ReviewArrayAdapter    extends ArrayAdapter<Review>
         {
             // inflate the layout
             LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
-//            convertView = inflater.inflate(layoutResourceId, parent, false);
             convertView = inflater.inflate(R.layout.detail_review_list_item, parent, false);
         }
 
@@ -58,7 +56,6 @@ public class ReviewArrayAdapter    extends ArrayAdapter<Review>
         textViewItem.setTag(review.url);
 
         return convertView;
-
     }
 
 }

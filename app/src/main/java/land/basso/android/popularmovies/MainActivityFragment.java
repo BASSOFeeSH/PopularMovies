@@ -43,9 +43,7 @@ public class MainActivityFragment extends Fragment
         // When no item is selected, mPosition will be set to Listview.INVALID_POSITION,
         // so check for that before storing.
         if (mPosition != ListView.INVALID_POSITION)
-        {
-            outState.putInt(SELECTED_KEY, mPosition);
-        }
+        {   outState.putInt(SELECTED_KEY, mPosition);   }
         super.onSaveInstanceState(outState);
     }
 
@@ -68,9 +66,7 @@ public class MainActivityFragment extends Fragment
             updateGrid();
         }
         else
-        {
-            if(mPosition != GridView.INVALID_POSITION) {   mGridView.smoothScrollToPosition(mPosition);   }
-        }
+        {   if(mPosition != GridView.INVALID_POSITION) {   mGridView.smoothScrollToPosition(mPosition);   } }
         super.onResume();
     }
 
@@ -95,6 +91,7 @@ public class MainActivityFragment extends Fragment
             Toast.makeText(getActivity().getApplicationContext(), exc.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
