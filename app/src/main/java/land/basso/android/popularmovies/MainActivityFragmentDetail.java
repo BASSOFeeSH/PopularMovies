@@ -45,6 +45,14 @@ public class MainActivityFragmentDetail extends Fragment
 
     private OnFragmentInteractionListener mListener;
 
+    public MainActivityFragmentDetail() { }
+
+    public MainActivityFragmentDetail(int position)
+    {
+        // Required empty public constructor
+        mPosition = position;
+    }
+
 //    /**
 //     * Use this factory method to create a new instance of
 //     * this fragment using the provided parameters.
@@ -63,14 +71,6 @@ public class MainActivityFragmentDetail extends Fragment
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    public MainActivityFragmentDetail() { }
-
-    public MainActivityFragmentDetail(int position)
-    {
-        // Required empty public constructor
-        mPosition = position;
     }
 
     @Override
@@ -113,12 +113,16 @@ public class MainActivityFragmentDetail extends Fragment
         rating.setText(mMovie.rating + "/10");
         overview.setText(mMovie.overview);
         if(mMovie.posterURL != null && mMovie.posterURL.length() > 0)
-        {   Picasso.with(getActivity()).load(mMovie.posterURL).into(poster);    }
+        {
+            Picasso.with(getActivity())
+                   .load(mMovie.posterURL)
+                   .into(poster);
+        }
 
         // Get a reference to the ListView, and attach this adapter to it.
         final ToggleButton toggle = (ToggleButton) rootView.findViewById(R.id.detail_button_favorite);
         MainActivity m = (MainActivity)getActivity();
-        if(m.mFavorites.contains(Integer.parseInt(((Movie)((MainActivity)getActivity()).mMovies.get(mPosition)).ID)))
+        if(m.mFavorites.contains(Integer.parseInt(((MainActivity)getActivity()).mMovies.get(mPosition).ID)))
         {   toggle.setChecked(true);    }
         else
         {   toggle.setChecked(false);   }
@@ -128,7 +132,7 @@ public class MainActivityFragmentDetail extends Fragment
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
             {
                 MainActivity m = (MainActivity)getActivity();
-                int movieID = Integer.parseInt(((Movie)m.mMovies.get(mPosition)).ID);
+                int movieID = Integer.parseInt(m.mMovies.get(mPosition).ID);
                 if (isChecked)
                 {
                     if(!m.mFavorites.contains(movieID))
@@ -150,7 +154,7 @@ public class MainActivityFragmentDetail extends Fragment
             }
         });
 
-        mTrailerAdapter = new TrailerArrayAdapter(getActivity(), R.id.detail_list_trailers, mMovie.trailers);
+//        mTrailerAdapter = new TrailerArrayAdapter(getActivity(), R.id.detail_list_trailers, mMovie.trailers);
 
         mTrailerListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
@@ -170,7 +174,7 @@ public class MainActivityFragmentDetail extends Fragment
             }
         });
 
-        mReviewAdapter = new ReviewArrayAdapter(getActivity(), R.id.detail_list_reviews, mMovie.reviews);
+//        mReviewAdapter = new ReviewArrayAdapter(getActivity(), R.id.detail_list_reviews, mMovie.reviews);
 
         mReviewListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -252,7 +256,7 @@ public class MainActivityFragmentDetail extends Fragment
      */
     public interface OnFragmentInteractionListener
     {
-        public void onFragmentInteraction(Uri uri);
+        void onFragmentInteraction(Uri uri);
     }
 
 }

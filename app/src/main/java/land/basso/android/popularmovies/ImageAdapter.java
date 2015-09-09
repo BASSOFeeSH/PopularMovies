@@ -52,10 +52,14 @@ public class ImageAdapter extends BaseAdapter
 
         if(((MainActivity)mContext).mMovies != null)
         {
-            Picasso.with(mContext).load(((MainActivity) mContext).mMovies.get(position).posterURL)
-                   .placeholder(R.drawable.loading)
-                    .error(R.drawable.error)
-                    .into(imageView);
+            if(((MainActivity)mContext).mMovies.get(position).posterURL != null && ((MainActivity)mContext).mMovies.get(position).posterURL.length() > 0)
+            {
+                Picasso.with(mContext)
+                        .load(((MainActivity) mContext).mMovies.get(position).posterURL)
+                        .error(R.drawable.error)
+                        .into(imageView); //
+//                .placeholder(R.drawable.loading)
+            }
         }
 
         return imageView;

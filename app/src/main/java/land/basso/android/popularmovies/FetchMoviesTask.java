@@ -25,10 +25,11 @@ import java.util.ArrayList;
 public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
 {
 
-    private final String        LOG_TAG = FetchMoviesTask.class.getSimpleName();
-    private final Context       mContext;
-    private final int           mPosition;
-    private ArrayList<Movie>    mMovies;
+    private final String LOG_TAG = FetchMoviesTask.class.getSimpleName();
+    private final Context mContext;
+    private final int mPosition;
+    private ArrayList<Movie> mMovies;
+    private boolean DEBUG = true;
 
     public FetchMoviesTask(Context context, int position)
     {
@@ -36,30 +37,36 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
         mPosition = position;
     }
 
-    private boolean DEBUG = true;
-
     @Override
     protected void onPostExecute(ArrayList<Movie> movies)
     {
         super.onPostExecute(movies);
 
-        ((MainActivity)mContext).mMovies = this.mMovies;
-        GridView posterGrid = (GridView)((MainActivity) mContext).findViewById(R.id.main_fragment_grid);
+        ((MainActivity) mContext).mMovies = this.mMovies;
+        GridView posterGrid = (GridView) ((MainActivity) mContext).findViewById(R.id.main_fragment_grid);
         posterGrid.invalidateViews();
-        if(mPosition != GridView.INVALID_POSITION) {    posterGrid.smoothScrollToPosition(mPosition);   }
+        if (mPosition != GridView.INVALID_POSITION)
+        {
+            posterGrid.smoothScrollToPosition(mPosition);
+        }
 
         hideProgressSpinner();
     }
 
     private void hideProgressSpinner()
     {
-        ProgressBar progressBar = (ProgressBar)(((MainActivity)mContext).findViewById(R.id.main_fragment_progress));
+        ProgressBar progressBar = (ProgressBar) (((MainActivity) mContext).findViewById(R.id.main_fragment_progress));
         progressBar.setIndeterminate(true);
         progressBar.setVisibility(View.INVISIBLE);
     }
 
     @Override
     protected ArrayList<Movie> doInBackground(Void... params)
+    {
+        return getMovies(1);
+    }
+
+    private ArrayList<Movie> getMovies(int retries)
     {
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
@@ -71,24 +78,26 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
 
         try
         {
-            ((MainActivity)mContext).mSort = Utility.getCurrentSort(mContext);
+            ((MainActivity) mContext).mSort = Utility.getCurrentSort(mContext);
             URL url;
-            if(Utility.isSortByPopularity(mContext))
+            if (Utility.isSortByPopularity(mContext))
             {//i.e. URL url = new URL("http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=cc363d0ba96599c03d034675c48f570a");
                 url = new URL(mContext.getString(R.string.api_discover_url)
-                                .replace(mContext.getString(R.string.api_sort_placeholder), mContext.getString(R.string.api_sort_by_popularity))
-                                .replace(mContext.getString(R.string.api_key_placeholder), mContext.getString(R.string.api_key))
-                                );
+                                      .replace(mContext.getString(R.string.api_sort_placeholder), mContext
+                                              .getString(R.string.api_sort_by_popularity))
+                                      .replace(mContext.getString(R.string.api_key_placeholder), mContext
+                                              .getString(R.string.api_key))
+                );
             }
             else //by rating
             {
                 url = new URL(mContext.getString(R.string.api_discover_url)
-                                      .replace(mContext.getString(R.string.api_sort_placeholder), mContext.getString(R.string.api_sort_by_rating))
-                                      .replace(mContext.getString(R.string.api_key_placeholder), mContext.getString(R.string.api_key))
+                                      .replace(mContext.getString(R.string.api_sort_placeholder), mContext
+                                              .getString(R.string.api_sort_by_rating))
+                                      .replace(mContext.getString(R.string.api_key_placeholder), mContext
+                                              .getString(R.string.api_key))
                 );
             }
-
-
             // Create the request to OpenWeatherMap, and open the connection
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
@@ -121,13 +130,27 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
             jsonStr = buffer.toString();
             getMovieDataFromJson(jsonStr);
         }
-        catch (Exception e)
+
+        catch(Exception e)
         {
-            Log.e("PlaceholderFragment", "Error ", e);
+            Log.e("getMovies attempt " + String.valueOf(retries), "Error ", e);
             // If the code didn't successfully get the weather data, there's no point in attemping
             // to parse it.
-            return null;
+            if (retries > 3)
+                return null;
+            else
+            {
+                try
+                {
+                    Thread.sleep(500);
+                }
+                catch (InterruptedException ex)
+                {
+                }
+                return getMovies(++ retries);
+            }
         }
+
         finally
         {
             if (urlConnection != null)
@@ -178,7 +201,7 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
                 movie.overview      =   rec.getString(OWM_OVERVIEW);
                 movie.releaseDate   =   rec.getString(OWM_RELASE_DATE).substring(0,4);
                 movie.posterURL     =   mContext.getString(R.string.api_image_url) +
-                                        mContext.getString(R.string.api_imagesize_huge) +
+                                        mContext.getString(R.string.api_imagesize_medium) +
                                         rec.getString(OWM_POSTER_PATH);
                 movie.title         =   rec.getString(OWM_TITLE);
                 movie.rating        =   rec.getString(OWM_VOTE_AVERAGE);
@@ -334,6 +357,11 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
 
     protected  ArrayList<Trailer> getTrailersForMovie(String movieID)
     {
+        return getTrailersForMovie(movieID, 1);
+    }
+
+    protected  ArrayList<Trailer> getTrailersForMovie(String movieID, int retries)
+    {
         ArrayList<Trailer> returnVal = new ArrayList<Trailer>();
 
         HttpURLConnection urlConnection = null;
@@ -384,10 +412,16 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
         }
         catch (Exception e)
         {
-            Log.e("PlaceholderFragment", "Error ", e);
+            Log.e("getTrailers attempt " + String.valueOf(retries), "Error ", e);
             // If the code didn't successfully get the weather data, there's no point in attemping
             // to parse it.
-            return null;
+            if(retries > 3)
+                return null;
+            else
+            {
+                try{Thread.sleep(500);}catch(InterruptedException ex){}
+                return getTrailersForMovie(movieID, ++ retries);
+            }
         }
         finally
         {
@@ -412,6 +446,11 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
     }
 
     protected  ArrayList<Review> getReviewsForMovie(String movieID)
+    {
+        return getReviewsForMovie(movieID, 1);
+    }
+
+    protected  ArrayList<Review> getReviewsForMovie(String movieID, int retries)
     {
         ArrayList<Review> returnVal = new ArrayList<Review>();
 
@@ -463,10 +502,16 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
         }
         catch (Exception e)
         {
-            Log.e("PlaceholderFragment", "Error ", e);
+            Log.e("getReviews attempt " + String.valueOf(retries), "Error ", e);
             // If the code didn't successfully get the weather data, there's no point in attemping
             // to parse it.
-            return null;
+            if(retries > 3)
+                return null;
+            else
+            {
+                try{Thread.sleep(500);}catch(InterruptedException ex){}
+                return getReviewsForMovie(movieID, ++ retries);
+            }
         }
         finally
         {
@@ -491,6 +536,11 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
     }
 
     protected  String getRunningTimeForMovie(String movieID)
+    {
+        return getRunningTimeForMovie(movieID, 1);
+    }
+
+    protected  String getRunningTimeForMovie(String movieID, int retries)
     {
         String returnVal = "";
 
@@ -541,10 +591,16 @@ public class FetchMoviesTask extends AsyncTask<Void, Void, ArrayList<Movie>>
         }
         catch (Exception e)
         {
-            Log.e("PlaceholderFragment", "Error ", e);
+            Log.e("getRunningTime attempt " + String.valueOf(retries), "Error ", e);
             // If the code didn't successfully get the weather data, there's no point in attemping
             // to parse it.
-            return null;
+            if(retries > 3)
+                return null;
+            else
+            {
+                try{Thread.sleep(500);}catch(InterruptedException ex){}
+                return getRunningTimeForMovie(movieID, ++ retries);
+            }
         }
         finally
         {
